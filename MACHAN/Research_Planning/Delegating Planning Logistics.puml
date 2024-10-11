@@ -1,0 +1,346 @@
+@startuml
+title State Machine Diagram for Delegating Planning Logistics
+
+[*] --> Idle
+
+Idle --> Greeting : Guest Initiates Inquiry
+note right of Greeting
+    **Description:**
+    - The guest requests the AI Assistant to handle all arrangements for their stay.
+    
+    **Example Message:**
+    - "Can you handle all the arrangements for my stay, including transfers and activities?"
+end note
+
+Greeting --> InformationCollection : AI Assistant Greets Guest
+note right of InformationCollection
+    **Description:**
+    - The AI Assistant acknowledges the request and seeks specific details about the services the guest wants to arrange.
+    
+    **Example Message:**
+    - "Absolutely! I'd be delighted to handle all your arrangements. Could you please specify which services you'd like us to organize, such as airport transfers, activity bookings, or special meals?"
+end note
+
+InformationCollection --> Analysis : Collect ServiceRequests and ScheduleDetails
+note right of Analysis
+    **Entities Collected:**
+    - **ServiceRequests:** "Airport transfer", "Activity booking", "Special meals"
+    - **ScheduleDetails:** Arrival time, Activity dates
+    
+    **Purpose:**
+    - Gather specific services and their scheduled timings to facilitate arrangements.
+end note
+
+Analysis --> FeasibilityCheck : All Decision Criteria Provided?
+note right of FeasibilityCheck
+    **Description:**
+    - Verify if all necessary information has been provided by the guest.
+    
+    **Conditions:**
+    - Check completeness of ServiceRequests and ScheduleDetails.
+end note
+
+FeasibilityCheck --> PlanningArrangements : Yes
+note right of PlanningArrangements
+    **Description:**
+    - Proceed to coordinate the requested services.
+    
+    **Actions:**
+    - Evaluate availability of requested services.
+    - Confirm scheduling based on ScheduleDetails.
+    
+    **Conditions:**
+    - Services are available for the requested times.
+end note
+
+FeasibilityCheck --> Clarification : No
+note right of Clarification
+    **Description:**
+    - If not all decision criteria are provided, seek additional information from the guest.
+    
+    **Actions:**
+    - Ask for missing ServiceRequests or ScheduleDetails.
+    
+    **Example Message:**
+    - "Could you please provide the arrival time and any specific activities you'd like us to book for you?"
+end note
+
+Clarification --> InformationCollection : Provide Missing Details
+note right of InformationCollection
+    **Description:**
+    - The guest provides the missing information, allowing the assistant to proceed with arrangements.
+    
+    **Example Message:**
+    - "Sure, I'll be arriving at 3 PM, and I'd like to book a spa session and a city tour."
+end note
+
+PlanningArrangements --> AvailabilityCheck : Confirm Availability of Services
+note right of AvailabilityCheck
+    **Description:**
+    - Verify if the requested services are available for the specified ScheduleDetails.
+    
+    **Actions:**
+    - Check internal resources and third-party partnerships for service availability.
+    
+    **Conditions:**
+    - Services are available and can be scheduled as per guest's requirements.
+end note
+
+AvailabilityCheck --> CoordinateServices : Services Available
+note right of CoordinateServices
+    **Description:**
+    - Proceed to organize and schedule the requested services.
+    
+    **Actions:**
+    - Coordinate with relevant departments (e.g., transportation, activities, dining).
+    - Schedule services based on ScheduleDetails.
+    
+    **Resulting State Change:**
+    - Services are booked and scheduled.
+end note
+
+AvailabilityCheck --> HandleUnavailableServices : Services Unavailable
+note right of HandleUnavailableServices
+    **Description:**
+    - If any requested service is unavailable, suggest alternatives.
+    
+    **Actions:**
+    - Apologize for the unavailability.
+    - Offer alternative services or different timings.
+    
+    **Example Message:**
+    - "I'm sorry, but the spa session on your selected date is fully booked. However, we can arrange it for the following day or offer a complimentary massage instead."
+end note
+
+HandleUnavailableServices --> SuggestAlternatives : Offer Alternative Services
+note right of SuggestAlternatives
+    **Description:**
+    - Present alternative options to the guest to accommodate their needs.
+    
+    **Actions:**
+    - Provide feasible alternatives based on availability.
+    
+    **Example Message:**
+    - "Would you like to schedule the spa session for the next available slot or try a different activity?"
+end note
+
+SuggestAlternatives --> GuestDecision : Guest Accepts or Declines Alternatives
+note right of GuestDecision
+    **Description:**
+    - Determine if the guest accepts the suggested alternatives.
+    
+    **Possible Outcomes:**
+    - **Accepts Alternatives:** Proceed to coordinate the alternative services.
+    - **Declines Alternatives:** Offer further assistance or modify other services.
+end note
+
+GuestDecision --> CoordinateAlternativeServices : Accepts Alternatives
+note right of CoordinateAlternativeServices
+    **Description:**
+    - Organize the alternative services as per guest's acceptance.
+    
+    **Actions:**
+    - Schedule the alternative services.
+    - Update ScheduleDetails accordingly.
+end note
+
+GuestDecision --> FurtherAssistance : Declines Alternatives
+note right of FurtherAssistance
+    **Description:**
+    - Provide additional support or offer different alternatives if available.
+    
+    **Actions:**
+    - Ask if there are other services the guest would like to arrange.
+    
+    **Example Message:**
+    - "Is there another service you'd like us to arrange for your stay?"
+end note
+
+FurtherAssistance --> SuggestMoreAlternatives : Offer More Alternatives
+note right of SuggestMoreAlternatives
+    **Description:**
+    - Present additional alternative options to the guest.
+    
+    **Actions:**
+    - Provide different service options or adjust ScheduleDetails.
+    
+    **Example Message:**
+    - "We can arrange a private yoga session or a guided nature walk instead. Would either of these interest you?"
+end note
+
+SuggestMoreAlternatives --> GuestFinalDecision : Guest Makes Final Decision
+note right of GuestFinalDecision
+    **Description:**
+    - Determine the guest's final decision regarding the service arrangements.
+    
+    **Possible Outcomes:**
+    - **Agrees to New Alternatives:** Proceed to coordinate the selected services.
+    - **Declines All Alternatives:** Offer to assist with other aspects or end the interaction.
+end note
+
+GuestFinalDecision --> CoordinateFinalServices : Agrees to New Alternatives
+note right of CoordinateFinalServices
+    **Description:**
+    - Organize the newly selected services as per guest's final decision.
+    
+    **Actions:**
+    - Schedule the chosen services.
+    - Update ScheduleDetails accordingly.
+end note
+
+GuestFinalDecision --> EndInteraction : Declines All Alternatives
+note right of EndInteraction
+    **Description:**
+    - Conclude the interaction without arranging the unavailable services.
+    
+    **Actions:**
+    - Offer to assist with other services.
+    - Ensure guest feels supported.
+    
+    **Example Message:**
+    - "I understand. Please let me know if there's anything else I can assist you with to make your stay comfortable."
+end note
+
+CoordinateServices --> ProcessPayment : Confirm and Process Payment
+note right of ProcessPayment
+    **Description:**
+    - Confirm the booked services and process the payment details.
+    
+    **Actions:**
+    - Collect PaymentDetails from the guest.
+    - Authorize and process payments for the arranged services.
+    
+    **Example Message:**
+    - "To finalize your arrangements, may I have your payment details?"
+end note
+
+CoordinateAlternativeServices --> ProcessPayment
+note right of ProcessPayment
+    **Description:**
+    - Similar to CoordinateServices, process payment for the alternative services.
+end note
+
+ProcessPayment --> CommunicateConfirmation : Communicate Confirmation
+note right of CommunicateConfirmation
+    **Description:**
+    - Provide detailed confirmation of all arranged services to the guest.
+    
+    **Actions:**
+    - Send confirmation details including schedules, contact information, and any necessary instructions.
+    
+    **Example Message:**
+    - "All your arrangements have been successfully booked. You'll receive an email with all the details shortly."
+end note
+
+CommunicateConfirmation --> GuestFeeling : Guest Feels Relieved and Appreciative
+note right of GuestFeeling
+    **Description:**
+    - The guest feels confident and relieved knowing all arrangements are handled.
+    
+    **Outcome:**
+    - Enhanced guest satisfaction and trust in the service.
+end note
+
+HandleUnavailableServices --> SuggestAlternatives
+SuggestAlternatives --> GuestDecision
+GuestDecision --> CoordinateAlternativeServices
+GuestDecision --> FurtherAssistance
+FurtherAssistance --> SuggestMoreAlternatives
+SuggestMoreAlternatives --> GuestFinalDecision
+GuestFinalDecision --> CoordinateFinalServices
+GuestFinalDecision --> EndInteraction
+
+CoordinateServices --> ProcessPayment
+CoordinateAlternativeServices --> ProcessPayment
+ProcessPayment --> CommunicateConfirmation
+CommunicateConfirmation --> GuestFeeling
+GuestFeeling --> [*]
+
+ProvidingComparativeInfo --> Idle : End Interaction
+note right of Idle
+    **Description:**
+    - If the guest decides not to proceed with booking, the conversation concludes.
+    
+    **Example Message:**
+    - "Thank you for considering our services. If you have any more questions, feel free to ask!"
+end note
+
+@enduml
+
+---
+
+## **7. Delegating Planning Logistics**
+
+### **Guest Intent:**
+
+"Can you handle all the arrangements for my stay, including transfers and activities?"
+
+**Guest's Job to Be Done:**
+
+Entrust the agent with all logistical planning to reduce personal effort.
+
+**Outcome for the Guest:**
+
+Enjoy a seamless experience without worrying about details.
+
+**Outcome for the Business:**
+
+Provide comprehensive service, increasing guest satisfaction and potential revenue from additional services.
+
+**Compulsory Entities:**
+
+- **ServiceRequests**
+    - **Type:** List of Strings
+    - **Purpose:** Specific services to be arranged.
+    - **Possible Values:** "Airport transfer", "Activity booking", "Special meals"
+- **ScheduleDetails**
+    - **Type:** Date and Time
+    - **Purpose:** Timing for services.
+    - **Possible Values:** Arrival time, Activity dates
+- **PaymentDetails**
+    - **Type:** Payment Information
+    - **Purpose:** Process payments for additional services.
+    - **Possible Values:** Credit card info, Payment authorization
+
+**Key Conditions:**
+
+- **Availability of Services**
+    - **Description:** Confirm services can be provided.
+    - **Related Entities:** ServiceRequests, ScheduleDetails
+
+**Primary Actions:**
+
+- **Coordinate Arrangements**
+    - **Description:** Organize requested services.
+    - **Required Entities:** ServiceRequests, ScheduleDetails
+    - **Resulting State Change:** Services booked.
+- **Communicate Confirmation**
+    - **Description:** Provide details of arrangements.
+    - **Required Entities:** ContactInformation
+    - **Resulting State Change:** Guest informed and reassured.
+
+**Core Conversation Flow:**
+
+- **Initial State:**
+    
+    Entities Collected: ServiceRequests
+    
+- **Action:** Confirm availability and costs.
+- **Action:** Process PaymentDetails.
+- **Action:** Send confirmation details.
+- **Final State:**
+    
+    Guest feels relieved and appreciative of the comprehensive service.
+    
+
+**Critical Error Handling:**
+
+- **Error:** Service unavailable.
+    - **Recovery Action:** Suggest alternatives.
+
+**Evidence/Citation:**
+
+- **Stakeholder Input:**
+    - *Sana noted that handling logistics enhances the guest experience and fosters loyalty (Meeting Transcript, 00:50).*
+
+---

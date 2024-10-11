@@ -1,0 +1,133 @@
+@startuml
+' Define participants
+actor Guest
+participant "AI Assistant" as Assistant
+participant "Reservation System" as System
+
+' Start of the interaction
+Guest -> Assistant: "Can you send me more photos or videos of your accommodations?"
+activate Assistant
+
+' Action: Collect MediaType, AccommodationType, ContactMethod
+Assistant -> Guest: "Of course! Could you please specify the type of media you're interested in,\nthe accommodation you're interested in, and your preferred contact method?"
+activate Guest
+
+' Guest provides MediaType, AccommodationType, ContactMethod
+Guest --> Assistant: MediaType: "<Media_Type>"\nAccommodationType: "<Accommodation_Type>"\nContactMethod: "<Contact_Method>"
+deactivate Guest
+
+' Action: Analyze Information
+Assistant -> Assistant: Analyze MediaType, AccommodationType, ContactMethod <<action>>
+
+' Condition: Media Availability
+alt Media Availability? <<condition>>
+    ' Action: Send Requested Media
+    Assistant -> System: "Retrieve '<Media_Type>' for '<Accommodation_Type>' <<action>>"
+    activate System
+    System --> Assistant: "Media retrieved successfully. <<entity>>"
+    deactivate System
+    
+    Assistant -> Guest: "I've sent the <Media_Type> for <Accommodation_Type> via <Contact_Method>."
+    activate Guest
+    
+    ' Condition: Confirmation of Receipt
+    alt Confirm Receipt? <<condition>>
+        Assistant -> Guest: "Could you please confirm if you've received the <Media_Type>?"
+        activate Guest
+        
+        Guest --> Assistant: "Yes, I've received them. Thank you!"
+        deactivate Guest
+    else (No)
+        ' Action: Follow up to Confirm Receipt
+        Assistant -> Guest: "I haven't received a confirmation yet. Have you received the <Media_Type>?"
+        activate Guest
+        
+        Guest --> Assistant: "Yes, I've received them. Thank you!"
+        deactivate Guest
+    end alt
+else (Media Unavailable <<condition>>)
+    ' Condition: Virtual Tour Availability
+    alt Virtual Tour Available? <<condition>>
+        ' Action: Provide Virtual Tour Link
+        Assistant -> System: "Fetch virtual tour link for '<Accommodation_Type>' <<action>>"
+        activate System
+        System --> Assistant: "Virtual tour link: '<Virtual_Tour_Link>' <<entity>>"
+        deactivate System
+        
+        Assistant -> Guest: "While the <Media_Type> for <Accommodation_Type> are currently unavailable,\nhere's a link to a virtual tour: <Virtual_Tour_Link>"
+    else (Virtual Tour Unavailable <<condition>>)
+        ' Action: Inform Media Unavailability
+        Assistant -> Guest: "I'm sorry, but the <Media_Type> for <Accommodation_Type> are currently unavailable.\nIs there anything else I can assist you with?"
+    end alt
+end alt
+
+' Action: Encourage Further Exploration
+Assistant -> Guest: "Feel free to ask any more questions or let me know if you'd like to explore other details."
+deactivate Assistant
+
+' Final State: Guest feels assisted
+Guest -> Assistant: "Thank you for your help!"
+@enduml
+
+
+## **3. Requesting Additional Visuals or Media**
+
+### **Guest Intent:** "Can you send me more photos or videos of your accommodations?"
+
+**Entities:**
+
+- **MediaType**
+    - **Type:** String
+    - **Purpose:** Type of media requested.
+    - **Possible Values:** "Photos", "Videos", "Virtual Tour"
+- **AccommodationType**
+    - **Type:** String
+    - **Purpose:** Specific accommodation the guest is interested in.
+    - **Possible Values:** "Canopy Machan", "Starlight Machan", etc.
+- **ContactMethod**
+    - **Type:** String
+    - **Purpose:** Preferred method to send media.
+    - **Possible Values:** "Email", "WhatsApp", "SMS"
+
+**Conditions:**
+
+- **Media Availability**
+    - **Description:** Check if requested media is available.
+    - **Related Entities:** AccommodationType, MediaType
+- **Contact Information Provided**
+    - **Description:** Ensure the guest has provided a contact method.
+    - **Related Entities:** ContactMethod
+
+**Actions:**
+
+- **Send Requested Media**
+    - **Description:** Dispatch the requested photos or videos via the preferred method.
+    - **Required Entities:** MediaType, AccommodationType, ContactMethod
+- **Provide Virtual Tour Link**
+    - **Description:** Offer a link to a virtual tour if available.
+    - **Required Entities:** AccommodationType
+- **Confirm Receipt**
+    - **Description:** Ask the guest to confirm receipt of the media.
+    - **Required Entities:** None
+
+**Conversation Flow:**
+
+1. **Guest Requests Additional Visuals**
+    - Entities Collected: MediaType, AccommodationType, ContactMethod
+2. **AI Checks Media Availability**
+    - Action: Verify if photos/videos are available for the specified accommodation.
+3. **IF** Media is available **THEN**
+    - Action: Send media via the preferred contact method.
+4. **ELSE**
+    - Action: Offer a virtual tour link or inform the guest that media is unavailable.
+5. **Final State:**
+    - Guest receives additional visuals to aid in their decision-making process.
+
+**Evidence from Transcripts:**
+
+- *"Could you send me more pictures of the Heritage Machan? I want to see the private plunge pool."*
+    
+    (Imagined example based on meeting insights)
+    
+
+---

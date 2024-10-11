@@ -1,0 +1,410 @@
+@startuml
+title State Machine Diagram for Booking Stage Guest Intents
+
+[*] --> Idle
+
+Idle --> Greeting : Guest Initiates Booking Interaction
+note right of Greeting
+    **Description:**
+    - The guest begins the booking process or asks a question related to booking.
+    
+    **Example Message:**
+    - "I am ready to book; please help me complete my reservation."
+end note
+
+Greeting --> CollectInitialDetails : Assistant Greets Guest
+note right of CollectInitialDetails
+    **Description:**
+    - The AI Assistant welcomes the guest and begins collecting essential booking details.
+    
+    **Example Message:**
+    - "Welcome! Let's get your reservation started. May I have your name and preferred check-in date?"
+end note
+
+CollectInitialDetails --> ConfirmAvailability : Collect Initial Details Complete
+note right of ConfirmAvailability
+    **Description:**
+    - The assistant verifies the availability of the selected accommodation based on initial details.
+    
+    **Actions:**
+    - Check `VacationDates` and `SelectedMachanType` for availability.
+end note
+
+ConfirmAvailability --> AvailabilityConfirmed : Availability is Confirmed
+note right of AvailabilityConfirmed
+    **Description:**
+    - The selected accommodation is available for the desired dates.
+    
+    **Actions:**
+    - Proceed to review booking details.
+end note
+
+ConfirmAvailability --> AvailabilityUnavailable : Accommodation Unavailable
+note right of AvailabilityUnavailable
+    **Description:**
+    - The selected accommodation is not available for the desired dates.
+    
+    **Recovery Action:**
+    - Suggest alternative dates or Machan types.
+    
+    **Example Message:**
+    - "I'm sorry, the Canopy Machan is unavailable for your selected dates. Would you like to choose different dates or another Machan type?"
+end note
+
+AvailabilityUnavailable --> SuggestAlternatives : Suggesting Alternatives
+note right of SuggestAlternatives
+    **Description:**
+    - The assistant offers alternative options to the guest to accommodate their booking needs.
+    
+    **Actions:**
+    - Provide available dates or alternative Machan types.
+    
+    **Example Message:**
+    - "We have the Forest Machan available on your selected dates or Canopy Machan on different dates. Which would you prefer?"
+end note
+
+SuggestAlternatives --> GuestDecision : Guest Chooses Alternative
+note right of GuestDecision
+    **Description:**
+    - The guest decides whether to accept the suggested alternatives or decline.
+    
+    **Possible Outcomes:**
+    - Accepts Alternative
+    - Declines Alternative
+end note
+
+GuestDecision --> ConfirmAvailability : Accepts Alternative
+note right of ConfirmAvailability
+    **Description:**
+    - If the guest accepts the alternative, re-verify availability and proceed.
+    
+    **Actions:**
+    - Check availability for the new selection.
+end note
+
+GuestDecision --> EndInteraction : Declines Alternative
+note right of EndInteraction
+    **Description:**
+    - If the guest declines, offer further assistance or end the interaction.
+    
+    **Example Message:**
+    - "I understand. If you need any further assistance, feel free to ask!"
+end note
+
+ConfirmAvailability --> ReviewBookingDetails : Availability Confirmed
+note right of ReviewBookingDetails
+    **Description:**
+    - The assistant reviews all collected booking details with the guest.
+    
+    **Actions:**
+    - Present `GuestDetails`, `VacationDates`, `SelectedMachanType`, `GroupSize`.
+    
+    **Example Message:**
+    - "Here are your booking details: Name - John Doe, Check-in - 2024-12-20, Check-out - 2024-12-25, Machan Type - Forest Machan, Group Size - 4. Is everything correct?"
+end note
+
+ReviewBookingDetails --> FinalizingReservation : Guest Confirms Details
+note right of FinalizingReservation
+    **Description:**
+    - The guest confirms that all booking details are correct.
+    
+    **Actions:**
+    - Proceed to handle special requests or discounts if any.
+end note
+
+ReviewBookingDetails --> ModifyBookingDetails : Guest Requests Changes
+note right of ModifyBookingDetails
+    **Description:**
+    - The guest requests modifications to the booking details before finalizing.
+    
+    **Example Message:**
+    - "Actually, I'd like to change the check-out date to 2024-12-26."
+end note
+
+ModifyBookingDetails --> CollectInitialDetails : Modify Booking
+note right of CollectInitialDetails
+    **Description:**
+    - Loop back to collect updated booking details.
+end note
+
+FinalizingReservation --> HandleSpecialRequests : Special Requests Present
+note right of HandleSpecialRequests
+    **Description:**
+    - If the guest has special requests, handle them before proceeding to payment.
+    
+    **Example Message:**
+    - "I'd like to add a late check-in and request allergen-free bedding."
+end note
+
+FinalizingReservation --> ApplyPromotionalCodes : Promo Code Present
+note right of ApplyPromotionalCodes
+    **Description:**
+    - If the guest has a promotional code, apply it to the booking.
+    
+    **Example Message:**
+    - "I have a promo code for a 10% discount."
+end note
+
+FinalizingReservation --> ProceedToPayment : No Special Requests or Promo Codes
+note right of ProceedToPayment
+    **Description:**
+    - If there are no special requests or promo codes, proceed directly to payment processing.
+end note
+
+HandleSpecialRequests --> ProcessSpecialRequests : Special Requests Handled
+note right of ProcessSpecialRequests
+    **Description:**
+    - The assistant records and confirms the special requests.
+    
+    **Actions:**
+    - Document `SpecialRequestDetails` and confirm feasibility.
+    
+    **Example Message:**
+    - "Your late check-in and allergen-free bedding requests have been noted and arranged."
+end note
+
+HandleSpecialRequests --> UnableToHandleRequests : Special Requests Unavailable
+note right of UnableToHandleRequests
+    **Description:**
+    - If certain requests cannot be accommodated, inform the guest and offer alternatives.
+    
+    **Recovery Action:**
+    - Suggest alternative solutions.
+    
+    **Example Message:**
+    - "I'm sorry, we cannot accommodate late check-ins on your selected dates. However, we can arrange an early check-out or offer an alternative service."
+end note
+
+UnableToHandleRequests --> SuggestAlternativeRequests : Offer Alternatives
+note right of SuggestAlternativeRequests
+    **Description:**
+    - Provide alternative options to the guest to fulfill their needs.
+    
+    **Example Message:**
+    - "Would you like to schedule an early check-out or perhaps request a different amenity?"
+end note
+
+SuggestAlternativeRequests --> GuestDecision : Guest Accepts or Declines Alternatives
+note right of GuestDecision
+    **Description:**
+    - The guest decides whether to accept the alternative requests or not.
+end note
+
+GuestDecision --> ProcessSpecialRequests : Accepts Alternatives
+note right of ProcessSpecialRequests
+    **Description:**
+    - Proceed to handle the accepted alternative requests.
+end note
+
+GuestDecision --> ProceedToPayment : Declines Alternatives
+note right of ProceedToPayment
+    **Description:**
+    - If the guest declines, proceed to payment without those requests.
+end note
+
+ApplyPromotionalCodes --> ValidatePromoCode : Guest Provides Promo Code
+note right of ValidatePromoCode
+    **Description:**
+    - The assistant validates the provided promo code against `EligibilityCriteria`.
+    
+    **Example Message:**
+    - "Please enter your promo code."
+end note
+
+ValidatePromoCode --> PromoCodeValid : Promo Code is Valid
+note right of PromoCodeValid
+    **Description:**
+    - The promo code is valid and applicable to the booking.
+    
+    **Actions:**
+    - Apply the discount and update booking total.
+end note
+
+ValidatePromoCode --> PromoCodeInvalid : Promo Code is Invalid
+note right of PromoCodeInvalid
+    **Description:**
+    - The promo code is invalid, expired, or does not meet eligibility criteria.
+    
+    **Recovery Action:**
+    - Inform the guest and offer assistance.
+    
+    **Example Message:**
+    - "I'm sorry, the promo code you entered is invalid or expired. Would you like to try another code or proceed without it?"
+end note
+
+PromoCodeValid --> ProceedToPayment : Apply Discount and Proceed
+note right of ProceedToPayment
+    **Description:**
+    - The discount is applied, and the booking proceeds to payment.
+end note
+
+PromoCodeInvalid --> OfferAssistance : Offer Help with Promo Codes
+note right of OfferAssistance
+    **Description:**
+    - Assist the guest in finding or applying valid promo codes.
+    
+    **Example Message:**
+    - "Would you like me to check for any available promotions or discounts?"
+end note
+
+OfferAssistance --> ApplyPromotionalCodes : Guest Seeks Assistance
+note right of ApplyPromotionalCodes
+    **Description:**
+    - The guest asks for assistance in applying or finding promo codes.
+end note
+
+PromoCodeInvalid --> ProceedToPayment : Guest Chooses to Proceed Without Promo
+note right of ProceedToPayment
+    **Description:**
+    - The guest decides to continue booking without applying the promo code.
+end note
+
+ProcessSpecialRequests --> ApplyPromotionalCodes : Continue Booking Process
+note right of ApplyPromotionalCodes
+    **Description:**
+    - After handling special requests, check if the guest has a promo code to apply.
+end note
+
+ProceedToPayment --> AssistPayment : Begin Payment Processing
+note right of AssistPayment
+    **Description:**
+    - The assistant guides the guest through the payment process, collecting `PaymentInformation`.
+    
+    **Example Message:**
+    - "Let's proceed to payment. Please provide your credit card details to secure your reservation."
+end note
+
+AssistPayment --> PaymentSuccessful : Payment is Successful
+note right of PaymentSuccessful
+    **Description:**
+    - The payment is processed successfully.
+    
+    **Actions:**
+    - Proceed to provide booking confirmation.
+end note
+
+AssistPayment --> PaymentFailed : Payment Fails
+note right of PaymentFailed
+    **Description:**
+    - The payment attempt fails due to various reasons (e.g., insufficient funds, network issues).
+    
+    **Recovery Action:**
+    - Offer alternative payment methods or assistance.
+    
+    **Example Message:**
+    - "I'm sorry, your payment could not be processed. Would you like to try a different payment method or need assistance?"
+end note
+
+PaymentFailed --> OfferAlternativePayment : Provide Other Payment Options
+note right of OfferAlternativePayment
+    **Description:**
+    - Present alternative payment methods to the guest.
+    
+    **Example Message:**
+    - "Would you like to use a different credit card, bank transfer, or another payment method?"
+end note
+
+OfferAlternativePayment --> AssistPayment : Guest Chooses Alternative Payment
+note right of AssistPayment
+    **Description:**
+    - The guest selects an alternative payment method, and the assistant proceeds to process it.
+end note
+
+OfferAlternativePayment --> EndInteraction : Guest Declines Alternatives
+note right of EndInteraction
+    **Description:**
+    - If the guest declines all payment options, end the interaction.
+    
+    **Example Message:**
+    - "I understand. If you need any further assistance, feel free to reach out. Thank you!"
+end note
+
+PaymentFailed --> EscalateToSupport : Unable to Resolve Payment
+note right of EscalateToSupport
+    **Description:**
+    - If payment issues persist, escalate to human support.
+    
+    **Example Message:**
+    - "I'm escalating your payment issue to our support team. They will contact you shortly to assist further."
+end note
+
+EscalateToSupport --> EndInteraction : End Interaction After Escalation
+note right of EndInteraction
+    **Description:**
+    - Conclude the interaction after escalating the issue.
+end note
+
+AssistPayment --> PaymentSuccessful
+
+PaymentSuccessful --> ProvideBookingConfirmation : Confirm Booking
+note right of ProvideBookingConfirmation
+    **Description:**
+    - Send booking confirmation details to the guest.
+    
+    **Example Message:**
+    - "Your reservation has been confirmed! You will receive an email with all the details shortly."
+end note
+
+ProvideBookingConfirmation --> EndInteraction : Booking Complete
+note right of EndInteraction
+    **Description:**
+    - The booking process is complete, and the interaction concludes successfully.
+end note
+
+HandleBookingIssues --> DiagnoseBookingIssue : Booking Issues Arise
+note right of DiagnoseBookingIssue
+    **Description:**
+    - Identify and understand the nature of the booking issue or error.
+    
+    **Example Message:**
+    - "I'm experiencing an error when trying to book. Can you help?"
+end note
+
+DiagnoseBookingIssue --> ProvideSolution : Issue Diagnosed
+note right of ProvideSolution
+    **Description:**
+    - Offer solutions or workarounds to resolve the booking issue.
+    
+    **Example Message:**
+    - "It seems there's a temporary glitch. Please try refreshing the page or using a different browser."
+end note
+
+ProvideSolution --> AssistBookingCompletion : Guide Through Resolution
+note right of AssistBookingCompletion
+    **Description:**
+    - Assist the guest in completing the booking after resolving the issue.
+end note
+
+ProvideSolution --> EscalateBookingIssue : Unable to Resolve
+note right of EscalateBookingIssue
+    **Description:**
+    - If the issue cannot be resolved, escalate to technical support or offer manual booking assistance.
+    
+    **Example Message:**
+    - "I'm unable to resolve the issue at the moment. Let me connect you with our support team to assist further."
+end note
+
+EscalateBookingIssue --> ManualBookingAssistance : Offer Manual Booking
+note right of ManualBookingAssistance
+    **Description:**
+    - Provide an alternative method for the guest to complete the booking manually.
+    
+    **Example Message:**
+    - "You can complete your booking by contacting our support team directly at support@themachan.com or call us at +123456789."
+end note
+
+ManualBookingAssistance --> EndInteraction : Conclude After Assistance
+note right of EndInteraction
+    **Description:**
+    - End the interaction after offering manual booking assistance.
+end note
+
+AssistBookingCompletion --> ProceedToPayment : Proceed to Payment
+note right of ProceedToPayment
+    **Description:**
+    - After resolving the issue, move the booking process to payment handling.
+end note
+
+EndInteraction --> [*]
+
+@enduml

@@ -1,0 +1,137 @@
+@startuml
+' Define participants
+actor Guest
+participant "AI Assistant" as Assistant
+participant "Reservation System" as System
+
+' Start of the interaction
+Guest -> Assistant: "I saw information about The Machan online,\nbut I want to confirm specific details."
+activate Assistant
+
+' Action: Collect InquiryType, ReferenceSource, VacationDates
+Assistant -> Guest: "Certainly! Could you specify which details you'd like to confirm\nand where you found the information?"
+activate Guest
+
+' Guest provides InquiryType, ReferenceSource, VacationDates
+Guest --> Assistant: InquiryType: "<Detail_Type>"\nReferenceSource: "<Source_Type>"\nVacationDates: "<Start_Date> to <End_Date>"
+deactivate Guest
+
+' Action: Analyze Information
+Assistant -> Assistant: Analyze InquiryType, ReferenceSource, VacationDates <<action>>
+
+' Condition: Detail Verification Needed
+alt Detail Verification Needed <<condition>>
+    ' Action: Provide Confirmation
+    Assistant -> System: Fetch details about '<Detail_Type>' <<action>>
+    activate System
+    System --> Assistant: "Details confirmed: '<Confirmation_Details>' <<entity>>"
+    deactivate System
+    
+    ' Condition: Detail aligns with offerings
+    alt Detail aligns with offerings <<condition>>
+        ' Action: Affirm and Offer More Information
+        Assistant -> Guest: "Yes, that's correct! <Affirmation_Message>\nWould you like to know more about any of these?"
+        activate Guest
+        
+        ' Condition: Additional Preferences Provided
+        alt Additional Preferences Provided <<condition>>
+            ' Action: Refine Recommendations
+            Assistant -> System: Refine recommendations based on preferences <<action>>
+            activate System
+            System --> Assistant: "Refined recommendations: '<Refined_Recommendations>' <<entity>>"
+            deactivate System
+            
+            Assistant -> Guest: "Here are some refined recommendations based on your preferences."
+        else (No Additional Preferences)
+            ' Action: Highlight Unique Features
+            Assistant -> Guest: "Here are some unique features of our recommended accommodations."
+            activate Guest
+        end alt
+    else (Detail does not align <<condition>>)
+        ' Action: Clarify or Correct Information
+        Assistant -> Guest: "I apologize for any confusion.\nIt seems there might be outdated information.\nHere's the correct information about '<Detail_Type>'."
+        activate Guest
+        
+        Guest -> Assistant: "Thank you for the clarification."
+        deactivate Guest
+    end alt
+else (No Detail Verification Needed <<condition>>)
+    ' Action: Provide Standard Information
+    Assistant -> Guest: "Here's the standard information about '<Detail_Type>'."
+    activate Guest
+    
+    Guest -> Assistant: "Thanks for the information."
+    deactivate Guest
+end alt
+
+' Action: Encourage Further Exploration
+Assistant -> Guest: "Feel free to ask any more questions or let me know if you'd like to explore other details."
+deactivate Assistant
+
+' Final State: Guest feels assured
+Guest -> Assistant: "Thank you for the clarification!"
+@enduml
+
+
+
+## **2. Seeking Personalized Recommendations**
+
+### **Guest Intent:** "I have specific preferences and need personalized accommodation suggestions."
+
+**Entities:**
+
+- **Preferences**
+    - **Type:** List of Strings
+    - **Purpose:** Capture the guest's specific preferences.
+    - **Possible Values:** "Private pool", "Secluded location", "Luxury amenities", "Family-friendly"
+- **GroupSize**
+    - **Type:** Integer
+    - **Purpose:** Number of guests.
+    - **Possible Values:** 1 to 10+
+- **DestinationInterest**
+    - **Type:** String
+    - **Purpose:** Preferred locations.
+    - **Possible Values:** "Lonavala", "Western Ghats", etc.
+
+**Conditions:**
+
+- **Preference Alignment**
+    - **Description:** Ensure recommendations match guest preferences.
+    - **Related Entities:** Preferences, GroupSize
+- **Availability Check**
+    - **Description:** Verify if preferred accommodations are available.
+    - **Related Entities:** DestinationInterest, VacationDates
+
+**Actions:**
+
+- **Provide Tailored Recommendations**
+    - **Description:** Suggest accommodations that align with the guest's preferences.
+    - **Required Entities:** Preferences, GroupSize
+- **Highlight Unique Features**
+    - **Description:** Emphasize features that make recommendations stand out.
+    - **Required Entities:** Preferences
+- **Invite to Discuss Further**
+    - **Description:** Encourage the guest to ask more questions or provide additional preferences.
+    - **Required Entities:** None
+
+**Conversation Flow:**
+
+1. **Guest Expresses Need for Personalized Suggestions**
+    - Entities Collected: Preferences, GroupSize
+2. **AI Provides Tailored Recommendations**
+    - Action: Suggest accommodations like the Starlight Machan for private pools.
+3. **IF** Additional Preferences are provided **THEN**
+    - Action: Refine recommendations accordingly.
+4. **ELSE**
+    - Action: Highlight unique features of suggested accommodations.
+5. **Final State:**
+    - Guest receives personalized accommodation options that meet their specific needs.
+
+**Evidence from Transcripts:**
+
+- *"I'm looking for a place with a private plunge pool and panoramic views for my honeymoon."*
+    
+    (Imagined example based on meeting insights)
+    
+
+---

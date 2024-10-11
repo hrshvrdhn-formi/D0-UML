@@ -1,0 +1,334 @@
+@startuml
+actor Guest
+participant "AI Assistant" as Assistant
+participant "Reservation System" as ReservationSystem
+participant "Policy Database" as PolicyDB
+
+' Start of the interaction
+Guest -> Assistant: "As an expert, what would you recommend for someone like me?"
+activate Assistant
+
+' Action: Collect GuestProfile and ExperienceSought
+Assistant -> Guest: "I'd be happy to help! Could you please share a bit about yourself and the type of experience you're looking for?"
+activate Guest
+
+' Guest provides GuestProfile and ExperienceSought
+Guest --> Assistant: "Couple\nRomance"
+deactivate Guest
+
+' Action: Collect Additional Preferences and Constraints
+Assistant -> Guest: "Additionally, could you please provide your preferences regarding amenities, your budget range, any children in your group, and if you're celebrating any special occasions?"
+activate Guest
+
+' Guest provides Preferences, BudgetRange, ChildPolicies, SpecialOccasion
+Guest --> Assistant: "Private plunge pool, panoramic views\nBudget: $2000 - $3000 per night\nNo children\nCelebrating anniversary"
+deactivate Guest
+
+' Condition: Are all Decision Criteria and Priority Features Provided?
+alt All Criteria Provided? <<condition>>
+    ' Action: Analyze Guest Profile and Experience
+    Assistant -> Assistant: Analyze GuestProfile, ExperienceSought, Preferences, BudgetRange, ChildPolicies, SpecialOccasion <<action>>
+    
+    ' Condition: Desired Machan Available?
+    alt Desired Machan Available? <<condition>>
+        ' Action: Recommend Desired Machan
+        Assistant -> ReservationSystem: "Check availability for 'Starlight Machan' from '2024-12-01' to '2024-12-10' <<action>>"
+        activate ReservationSystem
+        ReservationSystem --> Assistant: "Starlight Machan is available."
+        deactivate ReservationSystem
+        
+        ' Action: Recommend Desired Machan
+        Assistant -> Guest: "Based on your preferences, I recommend the **Starlight Machan**. It offers a retractable roof for stargazing, a private plunge pool, and luxurious amenities perfect for a romantic getaway. Would you like more details or assistance with booking?"
+        activate Guest
+        
+        ' Guest requests more details
+        Guest -> Assistant: "Yes, please provide more details about Starlight Machan."
+        deactivate Guest
+        
+        ' Action: Provide Detailed Accommodation Information
+        Assistant -> ReservationSystem: "Fetch details for 'Starlight Machan' <<action>>"
+        activate ReservationSystem
+        ReservationSystem --> Assistant: "Starlight Machan offers a retractable roof, private plunge pool, outdoor bathtub, four-poster star bed, and a stone-topped bar."
+        deactivate ReservationSystem
+        
+        Assistant -> Guest: "Here are the details for **Starlight Machan**:\n- **Price:** $2500 per night\n- **Amenities:** Retractable roof, private plunge pool, outdoor bathtub, four-poster star bed, stone-topped bar\n- **Special Features:** Perfect for stargazing and romantic evenings\nWould you like assistance with booking this accommodation?"
+        activate Guest
+        
+        ' Guest decides to book
+        Guest -> Assistant: "Yes, please assist me with the booking."
+        deactivate Guest
+        
+        ' Action: Assist with Booking
+        Assistant -> ReservationSystem: "Book 'Starlight Machan' for Guest from '2024-12-01' to '2024-12-10' <<action>>"
+        activate ReservationSystem
+        ReservationSystem --> Assistant: "Booking confirmed for Starlight Machan from 2024-12-01 to 2024-12-10."
+        deactivate ReservationSystem
+        
+        Assistant -> Guest: "Your booking at **Starlight Machan** has been confirmed for the specified dates. Is there anything else I can assist you with?"
+        activate Guest
+        
+        Guest -> Assistant: "No, that's all for now. Thank you!"
+        deactivate Guest
+    else (No)
+        ' Condition: Alternative Machans Available?
+        alt Alternative Machans Available? <<condition>>
+            ' Action: Recommend Alternative Machans
+            Assistant -> ReservationSystem: "Find alternative Machans for Couple seeking Romance <<action>>"
+            activate ReservationSystem
+            ReservationSystem --> Assistant: "Alternative Machans: **Canopy Machan**, **Rose Garden Machan**"
+            deactivate ReservationSystem
+            
+            Assistant -> Guest: "Unfortunately, the Starlight Machan is fully booked on your preferred dates. However, I can recommend the **Canopy Machan** or **Rose Garden Machan**, both of which offer a romantic ambiance with unique features. Would you like more details on either of these options?"
+            activate Guest
+            
+            ' Guest requests more details about Canopy Machan
+            Guest -> Assistant: "Yes, please provide more details about Canopy Machan."
+            deactivate Guest
+            
+            ' Action: Provide Detailed Accommodation Information
+            Assistant -> ReservationSystem: "Fetch details for 'Canopy Machan' <<action>>"
+            activate ReservationSystem
+            ReservationSystem --> Assistant: "Canopy Machan features an elevated platform with panoramic views, a bathtub on the private deck, and a glass façade offering uninterrupted greenery views."
+            deactivate ReservationSystem
+            
+            Assistant -> Guest: "Here are the details for **Canopy Machan**:\n- **Price:** $2300 per night\n- **Amenities:** Elevated platform, panoramic views, bathtub on private deck, glass façade\n- **Special Features:** Perfect for romantic evenings with stunning greenery views\nWould you like assistance with booking this accommodation?"
+            activate Guest
+            
+            ' Guest decides to book
+            Guest -> Assistant: "Yes, please assist me with the booking."
+            deactivate Guest
+            
+            ' Action: Assist with Booking
+            Assistant -> ReservationSystem: "Book 'Canopy Machan' for Guest from '2024-12-01' to '2024-12-10' <<action>>"
+            activate ReservationSystem
+            ReservationSystem --> Assistant: "Booking confirmed for Canopy Machan from 2024-12-01 to 2024-12-10."
+            deactivate ReservationSystem
+            
+            Assistant -> Guest: "Your booking at **Canopy Machan** has been confirmed for the specified dates. Is there anything else I can assist you with?"
+            activate Guest
+            
+            Guest -> Assistant: "No, that's all. Thank you!"
+            deactivate Guest
+        else (No)
+            ' Action: Inform Guest of Unavailability
+            Assistant -> Guest: "I'm sorry, but there are no suitable Machans available for your preferred dates. Would you like me to check availability for alternative dates or recommend similar experiences for a future stay?"
+            activate Guest
+            
+            ' Guest responds to check alternative dates
+            Guest -> Assistant: "Yes, please check for alternative dates."
+            deactivate Guest
+            
+            ' Action: Check Alternative Dates
+            Assistant -> ReservationSystem: "Check availability for 'Starlight Machan' on alternative dates <<action>>"
+            activate ReservationSystem
+            ReservationSystem --> Assistant: "Starlight Machan is available from 2024-12-15 to 2024-12-25."
+            deactivate ReservationSystem
+            
+            Assistant -> Guest: "The Starlight Machan is available from December 15th to December 25th. Would these dates work for you?"
+            activate Guest
+            
+            ' Guest agrees to new dates
+            Guest -> Assistant: "Yes, that works."
+            deactivate Guest
+            
+            ' Action: Assist with Booking on New Dates
+            Assistant -> ReservationSystem: "Book 'Starlight Machan' for Guest from '2024-12-15' to '2024-12-25' <<action>>"
+            activate ReservationSystem
+            ReservationSystem --> Assistant: "Booking confirmed for Starlight Machan from 2024-12-15 to 2024-12-25."
+            deactivate ReservationSystem
+            
+            Assistant -> Guest: "Your booking at **Starlight Machan** has been confirmed for the new dates. Is there anything else I can assist you with?"
+            activate Guest
+            
+            Guest -> Assistant: "No, that's all. Thank you!"
+            deactivate Guest
+        endif
+    endif
+
+    ' Condition: Budget Alignment?
+    alt Budget Within Range? <<condition>>
+        ' Action: Confirm Recommendation Fits Budget
+        Assistant -> Guest: "I'm glad the recommended Machan fits within your budget. Would you like to proceed with the booking?"
+    else (No)
+        ' Action: Suggest Budget-Friendly Machans
+        Assistant -> ReservationSystem: "Find budget-friendly Machans for Couple seeking Romance <<action>>"
+        activate ReservationSystem
+        ReservationSystem --> Assistant: "Budget-Friendly Machans: **Woods Machan**, **Forest Machan**"
+        deactivate ReservationSystem
+        
+        Assistant -> Guest: "I understand staying within your budget is important. Here are some more affordable options:\n1. **Woods Machan** - Offers a peaceful retreat with a private deck.\n2. **Forest Machan** - Features a treehouse experience with scenic views.\nWould you like more details on either of these options?"
+        activate Guest
+        
+        ' Guest requests more details about Woods Machan
+        Guest -> Assistant: "Yes, please provide more details about Woods Machan."
+        deactivate Guest
+        
+        ' Action: Provide Detailed Accommodation Information
+        Assistant -> ReservationSystem: "Fetch details for 'Woods Machan' <<action>>"
+        activate ReservationSystem
+        ReservationSystem --> Assistant: "Woods Machan offers a ground-based retreat with a private deck, authentic period decor, and a quiet, peaceful ambiance."
+        deactivate ReservationSystem
+        
+        Assistant -> Guest: "Here are the details for **Woods Machan**:\n- **Price:** $1800 per night\n- **Amenities:** Private deck, authentic period decor, quiet ambiance\n- **Special Features:** Perfect for a serene and romantic stay\nWould you like assistance with booking this accommodation?"
+        activate Guest
+        
+        ' Guest decides to book
+        Guest -> Assistant: "Yes, please assist me with the booking."
+        deactivate Guest
+        
+        ' Action: Assist with Booking
+        Assistant -> ReservationSystem: "Book 'Woods Machan' for Guest from '2024-12-01' to '2024-12-10' <<action>>"
+        activate ReservationSystem
+        ReservationSystem --> Assistant: "Booking confirmed for Woods Machan from 2024-12-01 to 2024-12-10."
+        deactivate ReservationSystem
+        
+        Assistant -> Guest: "Your booking at **Woods Machan** has been confirmed for the specified dates. Is there anything else I can assist you with?"
+        activate Guest
+        
+        Guest -> Assistant: "No, that's all. Thank you!"
+        deactivate Guest
+    endif
+
+    ' Condition: Child Policy Compliance?
+    alt Child Policies Met? <<condition>>
+        ' Action: Proceed with Recommendation
+        ' (Already handled in previous steps)
+    else (No)
+        ' Action: Recommend Suitable Alternatives
+        Assistant -> ReservationSystem: "Find Machans accommodating children <<action>>"
+        activate ReservationSystem
+        ReservationSystem --> Assistant: "Suitable Machans: **Jungle Plus Machan**, **Sunset Machan**"
+        deactivate ReservationSystem
+        
+        Assistant -> Guest: "I noticed you have children in your group. I recommend the **Jungle Plus Machan** or **Sunset Machan**, which are well-suited for families and offer child-friendly amenities. Would you like more details on these options?"
+        activate Guest
+        
+        ' Guest requests more details about Jungle Plus Machan
+        Guest -> Assistant: "Yes, please provide more details about Jungle Plus Machan."
+        deactivate Guest
+        
+        ' Action: Provide Detailed Accommodation Information
+        Assistant -> ReservationSystem: "Fetch details for 'Jungle Plus Machan' <<action>>"
+        activate ReservationSystem
+        ReservationSystem --> Assistant: "Jungle Plus Machan offers extra space with a loft, additional bathroom, and a private sit-out area."
+        deactivate ReservationSystem
+        
+        Assistant -> Guest: "Here are the details for **Jungle Plus Machan**:\n- **Price:** $2200 per night\n- **Amenities:** Extra space with loft, additional bathroom, private sit-out\n- **Special Features:** Family-friendly with spacious accommodations\nWould you like assistance with booking this accommodation?"
+        activate Guest
+        
+        ' Guest decides to book
+        Guest -> Assistant: "Yes, please assist me with the booking."
+        deactivate Guest
+        
+        ' Action: Assist with Booking
+        Assistant -> ReservationSystem: "Book 'Jungle Plus Machan' for Guest from '2024-12-01' to '2024-12-10' <<action>>"
+        activate ReservationSystem
+        ReservationSystem --> Assistant: "Booking confirmed for Jungle Plus Machan from 2024-12-01 to 2024-12-10."
+        deactivate ReservationSystem
+        
+        Assistant -> Guest: "Your booking at **Jungle Plus Machan** has been confirmed for the specified dates. Is there anything else I can assist you with?"
+        activate Guest
+        
+        Guest -> Assistant: "No, that's all. Thank you!"
+        deactivate Guest
+    endif
+
+    ' Condition: DecisionFatigueLevel = Yes
+    alt DecisionFatigueLevel = Yes <<condition>>
+        ' Action: Simplify Options and Reassure
+        Assistant -> Guest: "I understand that choosing the perfect place can be overwhelming. Based on what you've shared, I recommend:\n1. **Starlight Machan**\n2. **Canopy Machan**\nWould you like more details on either of these options?"
+    else (No)
+        ' Action: Provide Detailed Recommendations
+        Assistant -> Guest: "Based on your profile and desired experience, here are some accommodations you might like:\n1. **Starlight Machan**\n2. **Canopy Machan**\nWould you like more details on any of these options?"
+    endif
+
+    ' Condition: Policy Implications Affect Booking?
+    alt Policy Implications Affect Booking? <<condition>>
+        ' Action: Explain Policy Implications
+        Assistant -> Guest: "Our cancellation policy allows for a full refund if canceled 14 days prior to arrival. Would that work for your plans?"
+    else (No)
+        ' Action: Offer Additional Assistance or Clarification
+        Assistant -> Guest: "If you have any other questions or need further assistance, feel free to ask!"
+    endif
+
+    ' Action: Encourage Further Questions
+    :Encourage further questions <<action>>;
+    note right: "Invite the guest to ask more questions or seek further clarification."
+
+    ' Final State: Guest feels confident in recommendation
+    :Guest feels confident in the expert's recommendation and is ready to proceed <<action>>;
+
+    stop
+@enduml
+
+
+
+## **3. Expert Guidance and Trust Building**
+
+### **Guest Intent:**
+
+"As an expert, what would you recommend for someone like me?"
+
+**Guest's Job to Be Done:**
+
+Leverage the agent's expertise to make a trusted decision without delving into details themselves.
+
+**Outcome for the Guest:**
+
+Feel assured that the expert's recommendation aligns with their needs.
+
+**Outcome for the Business:**
+
+Strengthen guest trust and increase booking likelihood through authoritative guidance.
+
+**Compulsory Entities:**
+
+- **GuestProfile**
+    - **Type:** String
+    - **Purpose:** General description of the guest.
+    - **Possible Values:** "Solo traveler", "Couple", "Family with kids", "Elderly couple"
+- **ExperienceSought**
+    - **Type:** String
+    - **Purpose:** Type of experience the guest desires.
+    - **Possible Values:** "Adventure", "Relaxation", "Romance", "Wellness"
+
+**Key Conditions:**
+
+- **Alignment with Expertise**
+    - **Description:** Match recommendations based on guest profile and desired experience.
+    - **Related Entities:** GuestProfile, ExperienceSought
+
+**Primary Actions:**
+
+- **Leverage Expertise**
+    - **Description:** Provide recommendations based on knowledge and experience.
+    - **Required Entities:** GuestProfile, ExperienceSought
+    - **Resulting State Change:** Guest trusts the recommendation.
+- **Personalize Communication**
+    - **Description:** Use empathetic and relatable language.
+    - **Required Entities:** Communication skills
+    - **Resulting State Change:** Enhanced rapport with guest.
+
+**Core Conversation Flow:**
+
+- **Initial State:**
+    
+    Entities Collected: GuestProfile, ExperienceSought
+    
+- **Action:** Provide a tailored recommendation, explaining why it's the best fit.
+- **Final State:**
+    
+    Guest feels confident in the expert's recommendation and is ready to proceed.
+    
+
+**Critical Error Handling:**
+
+- **Error:** Guest questions the recommendation.
+    - **Recovery Action:** Offer alternative options and explain their benefits.
+
+**Evidence/Citation:**
+
+- **Stakeholder Input:**
+    - *Sanat stressed the importance of agents acting as trusted advisors to help guests make confident decisions (Meeting Transcript, 00:30).*
+
+---

@@ -1,0 +1,288 @@
+@startuml
+title State Machine Diagram for Comparative Analysis of Booking Channels
+
+[*] --> Idle
+
+Idle --> Greeting : Guest Initiates Inquiry
+note right of Greeting
+    **Description:**
+    - Guest asks for a comparison between booking directly and using a third-party site.
+    
+    **Example Message:**
+    - "Can you compare the benefits of booking directly versus through a third-party site?"
+end note
+
+Greeting --> InformationCollection : AI Assistant Greets Guest
+note right of InformationCollection
+    **Description:**
+    - The AI Assistant acknowledges the request and seeks specific details.
+    
+    **Example Message:**
+    - "Certainly! I'd be happy to help you understand the differences between booking directly with us and using a third-party site. Could you please specify the factors that are most important to you, such as price, flexibility, or exclusive offers?"
+end note
+
+InformationCollection --> Analysis : Collect BookingChannels and ComparisonFactors
+note right of Analysis
+    **Entities Collected:**
+    - **BookingChannels:** "Direct booking", "OTA (Online Travel Agency)"
+    - **ComparisonFactors:** "Price", "Flexibility", "Exclusive offers"
+    
+    **Purpose:**
+    - Gather specific channels and factors to tailor the comparison.
+end note
+
+Analysis --> ProvidingComparativeInfo : All Decision Criteria Provided
+note right of ProvidingComparativeInfo
+    **Description:**
+    - The AI Assistant analyzes the collected information to prepare a comparative analysis.
+    
+    **Actions:**
+    - Evaluate benefits of each BookingChannel based on ComparisonFactors.
+    - Tailor explanations to guest's specific needs.
+    
+    **Conditions:**
+    - Ensure information is clear and concise.
+    - Align with business objectives to promote direct bookings.
+end note
+
+Analysis --> Clarification : Missing Information
+note right of Clarification
+    **Description:**
+    - The AI Assistant identifies any missing information and seeks clarification from the guest.
+    
+    **Actions:**
+    - Ask additional questions to gather necessary BookingChannels or ComparisonFactors.
+    
+    **Example Message:**
+    - "Could you please specify if there are any other factors you consider important for your booking decision?"
+end note
+
+Clarification --> InformationCollection : Provide Missing Details
+note right of InformationCollection
+    **Description:**
+    - The guest provides the missing information, allowing the assistant to proceed with the analysis.
+    
+    **Example Message:**
+    - "Yes, I also care about cancellation flexibility."
+end note
+
+ProvidingComparativeInfo --> OfferingIncentives : Highlight Direct Booking Benefits
+note right of OfferingIncentives
+    **Description:**
+    - The assistant emphasizes the advantages of booking directly with The Machan.
+    
+    **Actions:**
+    - Present exclusive offers available only through direct booking.
+    - Examples: Discount codes, complimentary services, loyalty points.
+    
+    **Conditions:**
+    - Current promotions are active and applicable.
+end note
+
+OfferingIncentives --> GuestEngagement : Present Exclusive Offers
+note right of GuestEngagement
+    **Description:**
+    - The assistant presents exclusive incentives to encourage direct bookings.
+    
+    **Example Message:**
+    - "When you book directly with us, you can enjoy a 10% discount on your stay and complimentary breakfast."
+end note
+
+GuestEngagement --> DecisionMaking : Guest Considers Information
+note right of DecisionMaking
+    **Description:**
+    - The guest evaluates the provided comparisons and incentives to make an informed decision.
+    
+    **Guest Actions:**
+    - Reviews the benefits of each booking channel.
+    - Weighs the offered incentives against third-party options.
+end note
+
+DecisionMaking --> BookingAssistance : Guest Ready to Proceed
+note right of BookingAssistance
+    **Description:**
+    - The guest decides to proceed with the preferred booking channel, likely choosing direct booking.
+    
+    **Example Message:**
+    - "I'd like to book directly to take advantage of the discount."
+end note
+
+DecisionMaking --> HandlingHesitation : Guest Hesitates
+note right of HandlingHesitation
+    **Description:**
+    - The guest expresses reservations or objections about the recommended booking channel.
+    
+    **Example Message:**
+    - "I'm not sure if the discount is worth it compared to other sites."
+end note
+
+HandlingHesitation --> HighlightPerks : Emphasize Additional Benefits
+note right of HighlightPerks
+    **Description:**
+    - The assistant attempts to persuade the guest by highlighting more perks of direct booking.
+    
+    **Actions:**
+    - Present additional exclusive benefits.
+    - Example: Flexible cancellation policies, personalized services.
+    
+    **Example Message:**
+    - "Additionally, booking directly with us offers free cancellation up to 24 hours before your stay and personalized room preferences."
+end note
+
+HighlightPerks --> DecisionMaking : Guest Reconsiders
+note right of DecisionMaking
+    **Description:**
+    - The guest reevaluates the booking channels after considering the additional perks.
+    
+    **Possible Outcomes:**
+    - Guest decides to proceed with direct booking.
+    - Guest remains hesitant and seeks alternatives.
+end note
+
+HighlightPerks --> AlternativeSolutions : Guest Still Hesitates
+note right of AlternativeSolutions
+    **Description:**
+    - The guest remains unconvinced about the benefits of direct booking.
+    
+    **Actions:**
+    - Offer alternative solutions or modifications.
+    
+    **Example Message:**
+    - "If the discount isn't the primary factor, we can offer you a complimentary spa package with your direct booking."
+end note
+
+AlternativeSolutions --> BookingAssistance : Offer Alternative Suggestions
+note right of BookingAssistance
+    **Description:**
+    - The assistant provides alternative suggestions to address the guest's hesitations.
+    
+    **Example Message:**
+    - "Would you like to include a spa package to enhance your stay?"
+end note
+
+AlternativeSolutions --> AdditionalSupport : Guest Remains Hesitant
+note right of AdditionalSupport
+    **Description:**
+    - The guest continues to express doubts, prompting the assistant to offer further support.
+    
+    **Actions:**
+    - Provide summary documents or suggest contacting customer support for personalized assistance.
+    
+    **Example Message:**
+    - "I understand. Here's a summary of the benefits of booking directly, or feel free to reach out to our customer support for more personalized options."
+end note
+
+AdditionalSupport --> Idle : End Interaction
+note right of Idle
+    **Description:**
+    - The conversation concludes without a booking, either successfully or without further action.
+    
+    **Example Message:**
+    - "Thank you for considering The Machan. If you have any more questions, feel free to ask!"
+end note
+
+BookingAssistance --> ConfirmBooking : Assist with Booking
+note right of ConfirmBooking
+    **Description:**
+    - The assistant guides the guest through the booking steps and confirms the booking details.
+    
+    **Example Actions:**
+    - Collect necessary information for the reservation.
+    - Confirm selected BookingChannel and ComparisonFactors.
+end note
+
+ConfirmBooking --> ProvideBookingConfirmation : Provide Booking Confirmation
+note right of ProvideBookingConfirmation
+    **Description:**
+    - The assistant finalizes the reservation and sends confirmation details to the guest.
+    
+    **Example Message:**
+    - "Your booking has been confirmed! You will receive an email with all the details shortly."
+end note
+
+ProvideBookingConfirmation --> Idle : Return to Idle
+note right of Idle
+    **Description:**
+    - The interaction concludes successfully with the guest having made a booking.
+end note
+
+ProvidingComparativeInfo --> Idle : End Interaction
+note right of Idle
+    **Description:**
+    - If the guest decides not to proceed with booking, the conversation concludes.
+    
+    **Example Message:**
+    - "Thank you for your time. If you have any more questions, feel free to reach out!"
+end note
+
+@enduml
+
+
+## **6. Comparative Analysis of Options**
+
+### **Guest Intent:**
+
+"Can you compare the benefits of booking directly versus through a third-party site?"
+
+**Guest's Job to Be Done:**
+
+Understand the advantages to make an informed booking channel choice.
+
+**Outcome for the Guest:**
+
+Decide on the most beneficial booking method.
+
+**Outcome for the Business:**
+
+Encourage direct bookings, reducing commission costs.
+
+**Compulsory Entities:**
+
+- **BookingChannels**
+    - **Type:** List of Strings
+    - **Purpose:** Channels being compared.
+    - **Possible Values:** "Direct booking", "OTA (Online Travel Agency)"
+- **ComparisonFactors**
+    - **Type:** List of Strings
+    - **Purpose:** Aspects important to the guest.
+    - **Possible Values:** "Price", "Flexibility", "Exclusive offers"
+
+**Key Conditions:**
+
+- **Highlighting Direct Booking Benefits**
+    - **Description:** Emphasize advantages of booking directly.
+    - **Related Entities:** ComparisonFactors
+
+**Primary Actions:**
+
+- **Provide Comparative Information**
+    - **Description:** Offer a clear comparison highlighting benefits.
+    - **Required Entities:** BookingChannels, ComparisonFactors
+    - **Resulting State Change:** Guest understands the advantages.
+- **Offer Incentives**
+    - **Description:** Present exclusive offers for direct bookings.
+    - **Required Entities:** Current promotions
+    - **Resulting State Change:** Increased motivation to book directly.
+
+**Core Conversation Flow:**
+
+- **Initial State:**
+    
+    Entities Collected: BookingChannels
+    
+- **Action:** Discuss ComparisonFactors.
+- **Action:** Provide detailed comparison.
+- **Final State:**
+    
+    Guest decides on the preferred booking channel, likely choosing direct booking.
+    
+
+**Critical Error Handling:**
+
+- **Error:** Guest perceives no benefit in direct booking.
+    - **Recovery Action:** Highlight additional perks or match third-party offers.
+
+**Evidence/Citation:**
+
+- **Stakeholder Input:**
+    - *Sanat pointed out the importance of guiding guests to book directly to enhance margins and control the guest experience (Meeting Transcript, 00:45).*

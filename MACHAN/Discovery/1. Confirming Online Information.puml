@@ -1,0 +1,135 @@
+@startuml
+' Define participants
+actor Guest
+participant "AI Assistant" as Assistant
+participant "Reservation System" as System
+
+' Start of the interaction
+Guest -> Assistant: "I saw information about The Machan online, but I want to confirm specific details."
+activate Assistant
+
+' Action: Collect InquiryType and ReferenceSource
+Assistant -> Guest: "Certainly! Could you specify which details you'd like to confirm and where you found the information?"
+activate Guest
+
+' Guest provides InquiryType and ReferenceSource
+Guest --> Assistant: InquiryType: "<Detail_Type>"\nReferenceSource: "<Source_Type>"
+deactivate Guest
+
+' Action: Analyze Information
+Assistant -> Assistant: "Analyze InquiryType and ReferenceSource <<action>>"
+
+' Condition: Detail Verification Needed
+alt Detail Verification Needed <<condition>>
+    ' Action: Provide Confirmation
+    Assistant -> System: "Fetch details about '<Detail_Type>' <<action>>"
+    activate System
+    System --> Assistant: "Details confirmed: '<Confirmation_Details>' <<entity>>"
+    deactivate System
+    
+    ' Condition: Does detail align with offerings?
+    alt Detail aligns with offerings <<condition>>
+        ' Action: Affirm and Offer More Information
+        Assistant -> Guest: "Yes, that's correct! <Affirmation_Message>\nWould you like to know more about any of these?"
+        activate Guest
+        
+        ' Optional: Guest requests more details
+        Guest -> Assistant: "Yes, tell me more about <Specific_Detail_Type>."
+        deactivate Guest
+        
+        ' Action: Provide Detailed Information
+        Assistant -> System: "Retrieve detailed info on '<Specific_Detail_Type>' <<action>>"
+        activate System
+        System --> Assistant: "Detailed Information: '<Detailed_Info>' <<entity>>"
+        deactivate System
+        
+        Assistant -> Guest: "<Detailed_Response_Message>\nIs there anything else you'd like to know?"
+        activate Guest
+        
+        Guest -> Assistant: "No, that's all for now. Thank you!"
+        deactivate Guest
+    else (Detail does not align with offerings <<condition>>)
+        ' Action: Clarify or Correct Information
+        Assistant -> Guest: "I apologize for any confusion.\nIt seems there might be outdated information.\nHere's the correct information about '<Detail_Type>'."
+        activate Guest
+        
+        Guest -> Assistant: "Thank you for the clarification."
+        deactivate Guest
+    end alt
+else (No Detail Verification Needed <<condition>>)
+    ' Action: Proceed with Standard Information Sharing
+    Assistant -> Guest: "Here's the standard information about '<Detail_Type>'."
+    activate Guest
+    
+    Guest -> Assistant: "Thanks for the information."
+    deactivate Guest
+end alt
+
+' Action: Encourage Further Exploration
+Assistant -> Guest: "Feel free to ask any more questions or let me know if you'd like to explore other details."
+deactivate Assistant
+
+' Final State: Guest feels assured
+Guest -> Assistant: "Thank you for the clarification!"
+@enduml
+
+
+
+## **1. Confirming Online Information**
+
+### **Guest Intent:** "I saw information about The Machan online, but I want to confirm specific details."
+
+**Entities:**
+
+- **InquiryType**
+    - **Type:** String
+    - **Purpose:** Identify the specific detail the guest wants to confirm.
+    - **Possible Values:** "Location", "Amenities", "Pricing", "Policies", "Availability"
+- **ReferenceSource**
+    - **Type:** String
+    - **Purpose:** Determine where the guest found the initial information.
+    - **Possible Values:** "Website", "Social Media", "Online Reviews", "Travel Blogs"
+- **VacationDates**
+    - **Type:** Date Range
+    - **Purpose:** Understand when the guest is planning to stay.
+    - **Possible Values:** Specific check-in and check-out dates.
+
+**Conditions:**
+
+- **Detail Verification Needed**
+    - **Description:** Determine if the guest needs confirmation on specific details.
+    - **Related Entities:** InquiryType, ReferenceSource
+- **Availability Check**
+    - **Description:** Verify if the desired details align with current offerings.
+    - **Related Entities:** VacationDates
+
+**Actions:**
+
+- **Provide Confirmation**
+    - **Description:** Confirm the specific detail the guest inquired about.
+    - **Required Entities:** InquiryType
+- **Clarify or Correct Information**
+    - **Description:** Offer additional context or correct any misinformation.
+    - **Required Entities:** ReferenceSource
+- **Encourage Further Exploration**
+    - **Description:** Invite the guest to explore more details or ask additional questions.
+    - **Required Entities:** None
+
+**Conversation Flow:**
+
+1. **Guest Confirms Online Information**
+    - Entities Collected: InquiryType, ReferenceSource
+2. **AI Provides Confirmation**
+    - Action: Confirm the specific detail (e.g., location, amenities).
+3. **IF** Detail aligns with offerings **THEN**
+    - Action: Affirm and offer to provide more information if needed.
+4. **ELSE**
+    - Action: Clarify or correct the information and offer alternatives.
+5. **Final State:**
+    - Guest feels assured about the accuracy of the information and is encouraged to engage further.
+
+**Evidence from Transcripts:**
+
+- *"I saw your eco-friendly initiatives on Instagram, can you confirm how you implement them?"*
+    
+    (Imagined example based on meeting insights)

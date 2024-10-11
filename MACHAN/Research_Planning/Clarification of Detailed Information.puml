@@ -1,0 +1,216 @@
+@startuml
+start
+
+:Guest Initiates Inquiry;
+note right
+    "I'm confused about the differences between your room types. Can you explain?"
+end note
+
+:AI Assistant Greets Guest;
+note right
+    "Of course! I'd be happy to help you understand the differences between our room types. Could you please specify which room types you're interested in and what information you'd like to know?"
+end note
+
+:Collect RoomTypes and InformationNeeded;
+note right
+    Entities:
+        - RoomTypes: "Canopy Machan", "Forest Machan", "Starlight Machan"
+        - InformationNeeded: "Size", "Amenities", "Views", "Price differences"
+end note
+
+if (All Decision Criteria Provided?) then (Yes)
+    :Analyze RoomTypes and InformationNeeded;
+    note right
+        Actions:
+            - Evaluate requested RoomTypes
+            - Identify specific InformationNeeded
+        Conditions:
+            - Ensure clarity and simplicity in explanations
+    end note
+    
+    :Provide Clear Comparisons;
+    note right
+        Actions:
+            - Explain differences in Size, Amenities, Views, Price
+            - Highlight unique features of each RoomType
+        Conditions:
+            - Information presented in an easily digestible format
+    end note
+    
+    :Use Visual Aids if Available;
+    note right
+        Actions:
+            - Share images or diagrams of each RoomType
+            - Enhance understanding through visual representation
+        Conditions:
+            - Access to relevant media resources
+    end note
+    
+    :Ask if More Information is Needed;
+    note right
+        Actions:
+            - Inquire if the guest needs further clarification
+            - Offer to assist with booking or provide additional details
+    end note
+    
+    if (Guest Needs More Information?) then (Yes)
+        :Provide Additional Details;
+        note right
+            Actions:
+                - Offer deeper insights into specific aspects
+                - Address any remaining questions
+        end note
+    endif
+    
+    :Ask if Ready to Proceed or Need Further Assistance;
+    note right
+        Actions:
+            - Determine if the guest is ready to make a decision
+            - Offer to assist with booking if ready
+            - Provide additional support if needed
+    end note
+    
+    if (Guest Ready to Decide?) then (Yes)
+        :Assist with Booking Process;
+        note right
+            Actions:
+                - Guide guest through reservation steps
+                - Confirm booking details
+        end note
+        
+        :Confirm Booking;
+        note right
+            Actions:
+                - Finalize reservation in Reservation System
+                - Provide booking confirmation to the guest
+        end note
+        
+        stop
+    else (No)
+        :Handle Booking Hesitation;
+        note right
+            Actions:
+                - Address any lingering concerns
+                - Offer incentives or alternative solutions
+        end note
+        
+        if (Guest Remains Confused?) then (Yes)
+            :Offer Additional Resources;
+            note right
+                Actions:
+                    - Provide summary documents or links
+                    - Suggest contacting customer support for personalized assistance
+            end note
+            
+            :End Interaction;
+            stop
+        else (No)
+            :Provide Further Assistance;
+            note right
+                Actions:
+                    - Continue addressing guest's needs
+                    - Ensure all queries are resolved
+            end note
+        endif
+    endif
+else (No)
+    :Ask Clarifying Questions to Collect Missing Information;
+    note right
+        Actions:
+            - Identify missing RoomTypes or InformationNeeded
+            - Engage guest to provide necessary details
+    end note
+    
+    :Return to Information Collection;
+    stop
+endif
+
+:Encourage Further Questions;
+note right
+    Actions:
+        - Invite the guest to ask any additional questions
+        - Ensure all aspects are covered for informed decision-making
+end note
+
+:Guest Feels Informed and Ready to Decide;
+note right
+    Outcome:
+        - Guest has a clear understanding of room types
+        - Prepared to make an informed booking decision
+end note
+
+stop
+@enduml
+
+
+
+## **4. Clarification of Detailed Information**
+
+### **Guest Intent:**
+
+"I'm confused about the differences between your room types. Can you explain?"
+
+**Guest's Job to Be Done:**
+
+Delegate the task of understanding complex accommodation details to the agent.
+
+**Outcome for the Guest:**
+
+Gain clarity on room types to make an informed choice.
+
+**Outcome for the Business:**
+
+Reduce barriers to booking by simplifying complex information.
+
+**Compulsory Entities:**
+
+- **RoomTypes**
+    - **Type:** List of Strings
+    - **Purpose:** Identify the room types in question.
+    - **Possible Values:** "Canopy Machan", "Forest Machan", "Starlight Machan"
+- **InformationNeeded**
+    - **Type:** List of Strings
+    - **Purpose:** Specific details the guest wants to understand.
+    - **Possible Values:** "Size", "Amenities", "Views", "Price differences"
+
+**Key Conditions:**
+
+- **Need for Simplified Explanation**
+    - **Description:** Guest requires information in an easily digestible format.
+    - **Related Entities:** InformationNeeded
+
+**Primary Actions:**
+
+- **Provide Clear Comparisons**
+    - **Description:** Explain differences in a straightforward manner.
+    - **Required Entities:** RoomTypes, InformationNeeded
+    - **Resulting State Change:** Guest understands the distinctions.
+- **Use Visual Aids**
+    - **Description:** Offer images or diagrams if possible.
+    - **Required Entities:** Access to media
+    - **Resulting State Change:** Enhanced understanding.
+
+**Core Conversation Flow:**
+
+- **Initial State:**
+    
+    Entities Collected: RoomTypes
+    
+- **Action:** Ask for specific InformationNeeded.
+- **Action:** Provide explanations, highlighting key differences.
+- **Final State:**
+    
+    Guest feels informed and ready to decide.
+    
+
+**Critical Error Handling:**
+
+- **Error:** Guest remains confused.
+    - **Recovery Action:** Offer additional resources or a summary document.
+
+**Evidence/Citation:**
+
+- **Stakeholder Input:**
+    - *Sana noted that simplifying complex information helps guests feel more confident in their choices (Meeting Transcript, 00:35).*
+
+---

@@ -1,0 +1,123 @@
+@startuml
+' Define participants
+actor Guest
+participant "AI Assistant" as Assistant
+participant "Policy Database" as PolicyDB
+
+' Start of the interaction
+Guest -> Assistant: "Can you explain your cancellation policy?"
+activate Assistant
+
+' Action: Collect PolicyType
+Assistant -> Guest: "Of course! Are you asking about our cancellation policy, check-in/check-out times, pet policy, or payment policy?"
+activate Guest
+
+' Guest provides PolicyType
+Guest --> Assistant: PolicyType: "Cancellation"
+deactivate Guest
+
+' Action: Provide Detailed Policy Information
+Assistant -> PolicyDB: "Retrieve details for 'Cancellation' policy <<action>>"
+activate PolicyDB
+PolicyDB --> Assistant: "Cancellation Policy: <Cancellation_Policy_Details>"
+deactivate PolicyDB
+
+Assistant -> Guest: "Our cancellation policy allows you to cancel up to 7 days before your scheduled arrival without any fees. Cancellations made within 7 days of arrival will incur a fee equivalent to one night's stay."
+activate Guest
+
+' Condition: Policy Implications Affect Booking
+alt Policy Implications Affect Booking? <<condition>>
+    ' Action: Explain Policy Implications
+    Assistant -> Guest: "This means if you decide to cancel within 7 days of your arrival date, a fee equivalent to one night's stay will be charged. Would you like assistance with managing your booking or any other questions?"
+    activate Guest
+    
+    Guest --> Assistant: "Yes, I might need to adjust my booking dates."
+    deactivate Guest
+    
+    ' Action: Assist with Booking Adjustment
+    Assistant -> PolicyDB: "Assist guest with adjusting booking dates <<action>>"
+    activate PolicyDB
+    PolicyDB --> Assistant: "Booking dates adjusted successfully."
+    deactivate PolicyDB
+    
+    Assistant -> Guest: "Your booking dates have been successfully adjusted. Is there anything else I can help you with?"
+    activate Guest
+    
+    Guest --> Assistant: "No, that's all. Thank you!"
+    deactivate Guest
+else (No)
+    ' Action: Offer Additional Assistance or Clarification
+    Assistant -> Guest: "If you have any other questions or need further clarification on our policies, feel free to ask!"
+    activate Guest
+    
+    Guest --> Assistant: "No, I'm good for now."
+    deactivate Guest
+end alt
+
+' Action: Encourage Further Questions (Handled within the above steps)
+
+' Final State: Guest understands policies
+Assistant -> Guest: "You're welcome! If you have any more questions in the future, don't hesitate to reach out."
+deactivate Assistant
+
+@enduml
+
+
+
+## **6. Seeking Clarifications on Policies**
+
+### **Guest Intent:** "I have questions about your booking or cancellation policies."
+
+**Entities:**
+
+- **PolicyType**
+    - **Type:** String
+    - **Purpose:** Specific policy the guest wants to understand.
+    - **Possible Values:** "Booking Policy", "Cancellation Policy", "Refund Policy", "Check-in/Check-out Times"
+- **VacationDates**
+    - **Type:** Date Range
+    - **Purpose:** When the guest plans to stay.
+    - **Possible Values:** Specific check-in and check-out dates.
+
+**Conditions:**
+
+- **Policy Availability**
+    - **Description:** Ensure the guest's inquiries are within the available policy information.
+    - **Related Entities:** PolicyType
+- **Relevance to Guest's Stay**
+    - **Description:** Policies applicable to the guest's intended dates or booking.
+    - **Related Entities:** VacationDates
+
+**Actions:**
+
+- **Provide Policy Details**
+    - **Description:** Share comprehensive information about the requested policies.
+    - **Required Entities:** PolicyType
+- **Clarify Policy Implications**
+    - **Description:** Explain how policies affect the guest's booking.
+    - **Required Entities:** VacationDates
+- **Offer to Send Policy Documents**
+    - **Description:** Provide detailed policy documents via email or other methods.
+    - **Required Entities:** ContactMethod (if needed)
+
+**Conversation Flow:**
+
+1. **Guest Inquires About Policies**
+    - Entities Collected: PolicyType
+2. **AI Provides Detailed Policy Information**
+    - Action: Share the relevant policy details.
+3. **IF** Policy Implications Affect Booking **THEN**
+    - Action: Explain how the policies apply to the guest's intended stay.
+4. **ELSE**
+    - Action: Offer additional assistance or clarification.
+5. **Final State:**
+    - Guest has a clear understanding of the policies relevant to their booking.
+
+**Evidence from Transcripts:**
+
+- *"Can you explain your cancellation policy? What happens if I need to change my dates?"*
+    
+    (Imagined example based on meeting insights)
+    
+
+---

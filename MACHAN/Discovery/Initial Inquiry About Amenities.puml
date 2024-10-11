@@ -1,0 +1,116 @@
+@startuml
+' Define participants
+actor Guest
+participant "AI Assistant" as Assistant
+participant "Reservation System" as System
+
+' Start of the interaction
+Guest -> Assistant: "Can you tell me more about the amenities you offer?"
+activate Assistant
+
+' Action: Collect DesiredAmenities
+Assistant -> Guest: "Certainly! Could you please specify which amenities you're interested in?"
+activate Guest
+
+' Guest provides DesiredAmenities
+Guest --> Assistant: DesiredAmenities: "<Desired_Amenities>"
+deactivate Guest
+
+' Action: Provide Detailed Amenities Information
+Assistant -> Assistant: Provide detailed amenities information <<action>>
+Assistant -> Guest: "We offer a variety of amenities including <List_of_Amenities>."
+activate Guest
+
+' Condition: Specific Accommodation Mentioned
+alt Specific Accommodation Mentioned? <<condition>>
+    ' Action: Highlight amenities specific to the mentioned accommodation
+    Assistant -> Guest: "For our <Specific_Accommodation_Type>, we offer exclusive amenities such as <Specific_Amenities>."
+    activate Guest
+    Guest --> Assistant: "Thank you for the details."
+    deactivate Guest
+else (No Specific Accommodation Mentioned <<condition>>)
+    ' Action: Emphasize unique or standout amenities
+    Assistant -> Guest: "Our standout amenities include <Unique_Amenities>, ensuring a memorable stay."
+    activate Guest
+    Guest --> Assistant: "That sounds great!"
+    deactivate Guest
+end alt
+
+' Action: Encourage Further Questions
+Assistant -> Guest: "Is there anything else you'd like to know about our amenities?"
+activate Guest
+
+' Guest decides to ask another question or ends the conversation
+alt Guest asks more questions
+    Guest -> Assistant: "<Additional_Question>"
+    deactivate Guest
+    ' The assistant would loop back to handle additional questions
+else (Guest ends the conversation)
+    Guest -> Assistant: "No, that's all for now. Thank you!"
+    deactivate Guest
+end alt
+
+' Final State: Guest is informed about the amenities
+Assistant -> Guest: "You're welcome! Feel free to reach out if you have any more questions."
+deactivate Assistant
+
+@enduml
+
+
+## **8. Initial Inquiry About Amenities**
+
+### **Guest Intent:** "I want to know what amenities your resort offers."
+
+**Entities:**
+
+- **DesiredAmenities**
+    - **Type:** List of Strings
+    - **Purpose:** Specific amenities the guest is interested in.
+    - **Possible Values:** "Spa", "Gym", "Wi-Fi", "Restaurant", "Pool"
+- **AccommodationType**
+    - **Type:** String
+    - **Purpose:** If specific to a type of accommodation.
+    - **Possible Values:** "Canopy Machan", "Starlight Machan", etc.
+
+**Conditions:**
+
+- **Amenity Availability**
+    - **Description:** Ensure the resort offers the requested amenities.
+    - **Related Entities:** DesiredAmenities
+- **Accommodation-Specific Amenities**
+    - **Description:** Check if amenities are specific to certain accommodations.
+    - **Related Entities:** AccommodationType
+
+**Actions:**
+
+- **Provide Detailed Amenities List**
+    - **Description:** Share comprehensive information about available amenities.
+    - **Required Entities:** DesiredAmenities
+- **Highlight Unique Amenities**
+    - **Description:** Emphasize amenities that set The Machan apart.
+    - **Required Entities:** DesiredAmenities
+- **Offer to Send Amenities Brochure**
+    - **Description:** Provide detailed amenities information via email or other methods.
+    - **Required Entities:** ContactMethod (if needed)
+
+**Conversation Flow:**
+
+1. **Guest Inquires About Amenities**
+    - Entities Collected: DesiredAmenities
+2. **AI Provides Detailed Amenities Information**
+    - Action: Share a list of available amenities.
+3. **IF** Specific Accommodation is mentioned **THEN**
+    - Action: Highlight amenities specific to that accommodation.
+4. **ELSE**
+    - Action: Emphasize unique or standout amenities.
+5. **Final State:**
+    - Guest is informed about the amenities offered, aiding in their decision-making.
+
+**Evidence from Transcripts:**
+
+- *"Can you tell me about the amenities available at The Machan? I'm particularly interested in wellness facilities."*
+    
+    (Imagined example based on meeting insights)
+    
+
+---

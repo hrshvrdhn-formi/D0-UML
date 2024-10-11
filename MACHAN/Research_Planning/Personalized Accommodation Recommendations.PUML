@@ -1,0 +1,544 @@
+@startuml
+start
+
+:Guest Initiates Inquiry;
+note right
+    "As an expert, what would you recommend for someone like me?"
+end note
+
+:AI Assistant Greets Guest;
+note right
+    "I'd be happy to help! Could you please share a bit about yourself and the type of experience you're looking for?"
+end note
+
+:Collect GuestProfile and ExperienceSought;
+note right
+    Entities:
+        - GuestProfile: "Solo traveler", "Couple", "Family with kids", "Elderly couple"
+        - ExperienceSought: "Adventure", "Relaxation", "Romance", "Wellness"
+end note
+
+:Collect Additional Preferences and Constraints;
+note right
+    Entities:
+        - Preferences: "Amenities", "Accessibility", "Meal Preferences"
+        - BudgetRange: "Minimum and Maximum Budget"
+        - ChildPolicies: "Presence and Ages of Children"
+        - SpecialOccasion: "Anniversary", "Honeymoon", "Family Vacation"
+end note
+
+if (All Decision Criteria Provided?) then (Yes)
+    :Analyze Preferences and Constraints;
+    note right
+        Actions:
+            - Process GuestProfile and ExperienceSought
+            - Evaluate Preferences, BudgetRange, ChildPolicies, SpecialOccasion
+        Conditions:
+            - Alignment with AI capabilities
+            - Feasibility based on current offerings
+    end note
+    
+    :Check Desired Machan Availability;
+    note right
+        Conditions:
+            - Desired Machan exists
+            - Availability for selected dates
+    end note
+
+    if (Desired Machan Available?) then (Yes)
+        :Provide Recommendations;
+        note right
+            Actions:
+                - Present desired Machan details
+                - Highlight unique features
+            Conditions:
+                - Suitability based on preferences
+                - Compliance with policies
+        end note
+
+        :Ask for More Details or Booking;
+        note right
+            Actions:
+                - Inquire if guest needs more information
+                - Offer booking assistance
+        end note
+
+        if (Guest Requests More Details?) then (Yes)
+            :Fetch Detailed Machan Information;
+            note right
+                Actions:
+                    - Retrieve comprehensive details from Reservation System
+            end note
+
+            :Provide Detailed Information to Guest;
+            note right
+                Actions:
+                    - Share amenities, pricing, special features
+            end note
+
+            :Ask for Booking Assistance;
+            note right
+                Actions:
+                    - Offer to assist with the reservation process
+        endif
+
+        if (Guest Decides to Book?) then (Yes)
+            :Assist with Booking Process;
+            note right
+                Actions:
+                    - Guide through payment
+                    - Confirm reservation details
+            end note
+
+            :Confirm Booking;
+            note right
+                Actions:
+                    - Finalize reservation in Reservation System
+            end note
+
+            :Provide Booking Confirmation to Guest;
+            note right
+                Actions:
+                    - Send confirmation details
+            end note
+
+            stop
+        else (No)
+            :Handle Booking Hesitation;
+            note right
+                Actions:
+                    - Address concerns
+                    - Offer incentives or alternative options
+            end note
+
+            if (Guest Still Hesitates?) then (Yes)
+                :Provide Additional Assistance;
+                note right
+                    Actions:
+                        - Offer further information
+                        - Reiterate benefits
+                end note
+
+                :End Interaction;
+                stop
+            else (No)
+                :Proceed with Booking or Alternatives;
+                note right
+                    Actions:
+                        - Reconfirm interest
+                        - Offer to proceed or explore other options
+                end note
+            endif
+        endif
+    else (No)
+        :Check Alternative Machans Availability;
+        note right
+            Actions:
+                - Search for similar Machans
+                - Evaluate based on preferences and constraints
+        end note
+
+        if (Alternative Machans Available?) then (Yes)
+            :Provide Alternative Recommendations;
+            note right
+                Actions:
+                    - Suggest available alternatives
+                    - Highlight comparable features
+            end note
+
+            :Ask for Guest's Preference on Alternatives;
+            note right
+                Actions:
+                    - Determine if guest prefers alternatives
+            end note
+
+            if (Guest Chooses Alternative?) then (Yes)
+                :Provide Details on Chosen Alternative;
+                note right
+                    Actions:
+                        - Share specific information about selected alternative Machan
+                end note
+
+                :Ask for Booking Assistance;
+                note right
+                    Actions:
+                        - Offer to assist with the reservation process
+                end note
+
+                if (Guest Decides to Book?) then (Yes)
+                    :Assist with Booking Process;
+                    :Confirm Booking;
+                    :Provide Booking Confirmation to Guest;
+                    stop
+                else (No)
+                    :Handle Booking Hesitation;
+                    if (Guest Still Hesitates?) then (Yes)
+                        :Provide Additional Assistance;
+                        :End Interaction;
+                        stop
+                    else (No)
+                        :Proceed with Booking or Further Alternatives;
+                    endif
+                endif
+            else (No)
+                :Provide Further Assistance or Explore Other Options;
+                note right
+                    Actions:
+                        - Offer to adjust preferences
+                        - Suggest waitlisting or future availability
+                end note
+            endif
+        else (No)
+            :Inform Guest of Unavailability;
+            note right
+                Actions:
+                    - Apologize for lack of available options
+                    - Offer to check future availability or join waitlist
+            end note
+
+            :Offer to Check Future Availability or Suggest Waitlist;
+            note right
+                Actions:
+                    - Provide options for future bookings
+            end note
+
+            :End Interaction;
+            stop
+        endif
+    endif
+
+    :Check Budget Alignment;
+    note right
+        Conditions:
+            - Recommended Machan fits within BudgetRange
+    end note
+
+    if (Budget Within Range?) then (Yes)
+        :Confirm Recommendation Fits Budget;
+        note right
+            Actions:
+                - Reassure guest about value
+                - Highlight benefits within budget
+        end note
+    else (No)
+        :Suggest Budget-Friendly Machans;
+        note right
+            Actions:
+                - Offer more affordable options
+                - Highlight cost-effective amenities
+        end note
+
+        if (Guest Chooses Budget-Friendly Option?) then (Yes)
+            :Provide Details on Budget-Friendly Machan;
+            note right
+                Actions:
+                    - Share specifics about the selected budget-friendly Machan
+            end note
+
+            :Ask for Booking Assistance;
+            note right
+                Actions:
+                    - Offer to assist with the reservation process
+            end note
+
+            if (Guest Decides to Book?) then (Yes)
+                :Assist with Booking Process;
+                :Confirm Booking;
+                :Provide Booking Confirmation to Guest;
+                stop
+            else (No)
+                :Handle Booking Hesitation;
+                note right
+                    Actions:
+                        - Address any remaining concerns
+                        - Offer additional incentives if possible
+                end note
+
+                if (Guest Still Hesitates?) then (Yes)
+                    :Provide Additional Assistance;
+                    :End Interaction;
+                    stop
+                else (No)
+                    :Proceed with Booking or Further Alternatives;
+                endif
+            endif
+        else (No)
+            :Provide Further Assistance or Explore Other Options;
+            note right
+                Actions:
+                    - Offer to adjust preferences
+                    - Suggest other cost-effective solutions
+            end note
+        endif
+    endif
+
+    :Check Child Policy Compliance;
+    note right
+        Conditions:
+            - Guest's group composition complies with ChildPolicies
+    end note
+
+    if (Child Policies Met?) then (Yes)
+        :Proceed with Recommendation;
+        note right
+            Actions:
+                - Finalize recommendation based on compliance
+        end note
+    else (No)
+        :Recommend Suitable Alternatives for Families;
+        note right
+            Actions:
+                - Suggest Machans that accommodate children
+                - Highlight family-friendly amenities
+        end note
+
+        if (Guest Chooses Alternative?) then (Yes)
+            :Provide Details on Family-Friendly Machan;
+            note right
+                Actions:
+                    - Share specifics about the selected family-friendly Machan
+            end note
+
+            :Ask for Booking Assistance;
+            note right
+                Actions:
+                    - Offer to assist with the reservation process
+            end note
+
+            if (Guest Decides to Book?) then (Yes)
+                :Assist with Booking Process;
+                :Confirm Booking;
+                :Provide Booking Confirmation to Guest;
+                stop
+            else (No)
+                :Handle Booking Hesitation;
+                if (Guest Still Hesitates?) then (Yes)
+                    :Provide Additional Assistance;
+                    :End Interaction;
+                    stop
+                else (No)
+                    :Proceed with Booking or Further Alternatives;
+                endif
+            endif
+        else (No)
+            :Provide Further Assistance or Explore Other Options;
+            note right
+                Actions:
+                    - Offer to adjust preferences
+                    - Suggest joining waitlist for family-friendly Machans
+            end note
+        endif
+    endif
+
+    :Assess Decision Fatigue Level;
+    note right
+        Conditions:
+            - Determines if guest is overwhelmed by choices
+    end note
+
+    if (High Decision Fatigue?) then (Yes)
+        :Simplify Options and Reassure Guest;
+        note right
+            Actions:
+                - Narrow down to top 2 recommendations
+                - Provide reassurances to build confidence
+        end note
+
+        :Provide Top 2 Recommendations;
+        note right
+            Entities:
+                - **Starlight Machan**
+                - **Canopy Machan**
+        end note
+
+        :Ask for Booking Assistance;
+        note right
+            Actions:
+                - Offer to assist with the reservation process
+        end note
+
+        if (Guest Decides to Book?) then (Yes)
+            :Assist with Booking Process;
+            :Confirm Booking;
+            :Provide Booking Confirmation to Guest;
+            stop
+        else (No)
+            :Handle Booking Hesitation;
+            note right
+                Actions:
+                    - Address any remaining concerns
+                    - Offer additional incentives if possible
+            end note
+
+            if (Guest Still Hesitates?) then (Yes)
+                :Provide Additional Assistance;
+                :End Interaction;
+                stop
+            else (No)
+                :Proceed with Booking or Further Alternatives;
+            endif
+        endif
+    else (No)
+        :Provide Detailed Recommendations;
+        note right
+            Actions:
+                - Share comprehensive details of each recommended Machan
+                - Highlight unique features and benefits
+        end note
+    endif
+
+    :Check Policy Implications Affecting Booking;
+    note right
+        Conditions:
+            - Relevant policies (e.g., cancellation, payment terms) impact booking decision
+    end note
+
+    if (Policies Affect Booking?) then (Yes)
+        :Explain Relevant Policies (Cancellation, Payment);
+        note right
+            Actions:
+                - Inform guest about cancellation terms
+                - Explain payment processes and deadlines
+        end note
+    else (No)
+        :Offer Additional Assistance or Clarifications;
+        note right
+            Actions:
+                - Provide further information as needed
+                - Answer any lingering questions
+        end note
+    endif
+
+else (No)
+    :Ask Clarifying Questions to Collect Missing Information;
+    note right
+        Actions:
+            - Engage guest to gather all necessary preferences and requirements
+            - Ensure completeness of data for accurate recommendations
+    end note
+
+    :Return to Information Collection;
+    note right
+        Actions:
+            - Prompt guest to provide missing details
+    end note
+
+    stop
+endif
+
+:Encourage Further Questions;
+note right
+    Actions:
+        - Invite the guest to ask more questions
+        - Ensure all concerns and preferences are addressed
+end note
+
+:Guest Feels Confident in Recommendation and Ready to Proceed;
+note right
+    Outcome:
+        - Guest is assured and prepared to make a booking
+        - Positive end to the interaction
+end note
+
+stop
+@enduml
+
+
+
+## **1. Personalized Accommodation Recommendations**
+
+### **Guest Intent:**
+
+"I have specific preferences and need help choosing the best accommodation for my stay."
+
+**Guest's Job to Be Done:**
+
+Delegate the complexity of selecting the ideal accommodation that matches their unique preferences and requirements.
+
+**Outcome for the Guest:**
+
+Receive personalized recommendations that align with their needs, leading to a confident and satisfying booking decision.
+
+**Outcome for the Business:**
+
+Increase the likelihood of a booking by providing tailored options, enhancing guest satisfaction and fostering trust.
+
+**Compulsory Entities:**
+
+- **GuestPreferences**
+    - **Type:** List of Strings
+    - **Purpose:** Capture specific desires and needs.
+    - **Possible Values:** "Privacy", "Luxury", "Eco-friendly features", "Family-friendly", "Romantic ambiance"
+- **GroupSize**
+    - **Type:** Integer
+    - **Purpose:** Determine the number of guests.
+    - **Possible Values:** 1 to 10+
+- **VacationDates**
+    - **Type:** Date Range
+    - **Purpose:** Identify the intended stay period.
+    - **Possible Values:** Specific check-in and check-out dates.
+- **BudgetRange**
+    - **Type:** Numeric Range
+    - **Purpose:** Understand financial constraints.
+    - **Possible Values:** Any monetary range.
+
+**Key Conditions:**
+
+- **Match Between Preferences and Available Machans**
+    - **Description:** Ensure that the available accommodations align with the guest's specific preferences.
+    - **Related Entities:** GuestPreferences, GroupSize
+    - **Possible Values:** Availability status.
+- **Budget Alignment**
+    - **Description:** Recommendations should fit within the guest's budget.
+    - **Related Entities:** BudgetRange
+    - **Possible Values:** Within budget, Over budget
+
+**Primary Actions:**
+
+- **Collect Detailed Preferences**
+    - **Description:** Engage with the guest to gather all necessary preferences.
+    - **Required Entities:** GuestPreferences, GroupSize, BudgetRange
+    - **Resulting State Change:** Comprehensive understanding of guest needs.
+- **Analyze and Match Preferences**
+    - **Description:** Use guest inputs to identify suitable accommodations.
+    - **Required Entities:** All collected entities
+    - **Resulting State Change:** List of matching Machans.
+- **Provide Personalized Recommendations**
+    - **Description:** Present tailored options highlighting how they meet the guest's needs.
+    - **Required Entities:** Matching Machans
+    - **Resulting State Change:** Guest informed about best-fit options.
+
+**Core Conversation Flow:**
+
+- **Initial State:**
+    
+    Entities Collected: Partial (e.g., GuestPreferences)
+    
+- **IF** GuestPreferences and GroupSize are provided **THEN**
+    - **Action:** Analyze available options that match preferences.
+    - **IF** Matching Machans are found within BudgetRange **THEN**
+        - **Action:** Provide personalized recommendations.
+    - **ELSE**
+        - **Action:** Suggest adjusting preferences or budget.
+- **ELSE**
+    - **Action:** Ask clarifying questions to collect missing entities.
+- **Final State:**
+    
+    Guest feels confident in the recommendations and is inclined to proceed with booking.
+    
+
+**Critical Error Handling:**
+
+- **Error:** No Machans match all preferences.
+    - **Recovery Action:** Prioritize preferences and offer the closest matches.
+- **Error:** BudgetRange conflicts with GuestPreferences.
+    - **Recovery Action:** Discuss potential compromises or alternative dates for better rates.
+
+**Evidence/Citation:**
+
+- **Stakeholder Input:**
+    - *Sana emphasized the importance of understanding guest preferences to provide tailored recommendations that build trust (Meeting Transcript, 00:15).*
+- **Context from Meeting Transcript:**
+    - *"We must ensure that guests feel their unique needs are understood and that we're offering solutions that truly match what they're looking for."* — **Sanat** (Meeting Transcript, 00:20)
+
+---

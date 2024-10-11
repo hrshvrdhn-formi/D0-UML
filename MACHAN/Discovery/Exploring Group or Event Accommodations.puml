@@ -1,0 +1,187 @@
+@startuml
+' Define participants
+actor Guest
+participant "AI Assistant" as Assistant
+participant "Reservation System" as System
+participant "Event Support System" as EventSystem
+
+' Start of the interaction
+Guest -> Assistant: "I'm organizing an event and need information on accommodations for a large group."
+activate Assistant
+
+' Action: Collect GroupSize, EventType, AccommodationType, VacationDates
+Assistant -> Guest: "I'd be happy to help! Could you please provide the number of attendees, the type of event,\nthe accommodations you're interested in, and the dates for your event?"
+activate Guest
+
+' Guest provides GroupSize, EventType, AccommodationType, VacationDates
+Guest --> Assistant: GroupSize: "<Group_Size>"\nEventType: "<Event_Type>"\nAccommodationType: "<Accommodation_Type>"\nVacationDates: "<Start_Date> to <End_Date>"
+deactivate Guest
+
+' Action: Analyze Information
+Assistant -> Assistant: Analyze GroupSize, EventType, AccommodationType, VacationDates <<action>>
+
+' Condition: Group Accommodation Availability
+alt Group Accommodation Availability? <<condition>>
+    ' Action: Provide Group Accommodation Options
+    Assistant -> System: "Retrieve accommodations for GroupSize: '<Group_Size>', EventType: '<Event_Type>', AccommodationType: '<Accommodation_Type>', Dates: '<Start_Date> to <End_Date>' <<action>>"
+    activate System
+    System --> Assistant: "Available accommodations: '<Accommodation_Options>' <<entity>>"
+    deactivate System
+    
+    ' Action: Present Accommodation Options to Guest
+    Assistant -> Guest: "Based on your requirements, here are some suitable accommodations:\n<Accommodation_Options>\nWould you like more details on any of these options?"
+    activate Guest
+    
+    ' Guest requests more details
+    Guest -> Assistant: "Yes, please provide more details about <Specific_Accommodation>."
+    deactivate Guest
+    
+    ' Action: Provide Detailed Accommodation Information
+    Assistant -> System: "Fetch details for '<Specific_Accommodation>' <<action>>"
+    activate System
+    System --> Assistant: "Details: '<Detailed_Accommodation_Info>' <<entity>>"
+    deactivate System
+    
+    Assistant -> Guest: "<Detailed_Accommodation_Info>\nWould you like to know about the event support services available?"
+    activate Guest
+    
+    ' Guest inquires about event support services
+    Guest -> Assistant: "Yes, please provide information on event support services."
+    deactivate Guest
+    
+    ' Action: Share Event Support Services
+    Assistant -> EventSystem: "Retrieve event support services for EventType: '<Event_Type>' <<action>>"
+    activate EventSystem
+    EventSystem --> Assistant: "Event support services: '<Event_Support_Details>' <<entity>>"
+    deactivate EventSystem
+    
+    Assistant -> Guest: "We offer the following event support services:\n<Event_Support_Details>\nWould you like assistance with event planning or applying these services?"
+    activate Guest
+    
+    ' Guest decides to assist with event planning
+    Guest -> Assistant: "Yes, please assist me with event planning."
+    deactivate Guest
+    
+    ' Action: Assist with Event Planning
+    Assistant -> EventSystem: "Initiate event planning for EventType: '<Event_Type>', Accommodation: '<Specific_Accommodation>' <<action>>"
+    activate EventSystem
+    EventSystem --> Assistant: "Event planning assistance initiated. A coordinator will contact you via <Contact_Method>."
+    deactivate EventSystem
+    
+    Assistant -> Guest: "I've initiated the event planning process. Our event coordinator will reach out to you via your preferred contact method.\nIs there anything else I can assist you with?"
+    activate Guest
+    
+    Guest -> Assistant: "No, that's all for now. Thank you!"
+    deactivate Guest
+else (Group Accommodation Unavailable <<condition>>)
+    ' Action: Inform Unavailability and Offer Alternatives
+    Assistant -> Guest: "I'm sorry, but we currently don't have accommodations that fit your group size and event type for the selected dates.\nWould you like information on upcoming availability or alternative accommodations?"
+    activate Guest
+    
+    ' Guest requests information on upcoming availability
+    Guest -> Assistant: "Yes, please provide information on upcoming availability."
+    deactivate Guest
+    
+    ' Action: Provide Upcoming Availability
+    Assistant -> System: "Retrieve upcoming availability for GroupSize: '<Group_Size>', EventType: '<Event_Type>' <<action>>"
+    activate System
+    System --> Assistant: "Upcoming availability: '<Upcoming_Availability_Details>' <<entity>>"
+    deactivate System
+    
+    Assistant -> Guest: "Here are the upcoming availability details:\n<Upcoming_Availability_Details>\nWould you like to be notified when these accommodations become available?"
+    activate Guest
+    
+    ' Guest opts to be notified
+    Guest -> Assistant: "Yes, please notify me when they become available."
+    deactivate Guest
+    
+    ' Action: Register for Notifications
+    Assistant -> System: "Register guest for notifications on upcoming availability <<action>>"
+    activate System
+    System --> Assistant: "Guest registered for notifications. <<entity>>"
+    deactivate System
+    
+    Assistant -> Guest: "You've been registered to receive notifications about upcoming availability. Is there anything else I can assist you with?"
+    activate Guest
+    
+    Guest -> Assistant: "No, thank you!"
+    deactivate Guest
+end alt
+
+' Action: Encourage Further Exploration
+Assistant -> Guest: "Feel free to ask any more questions or provide additional preferences if needed."
+deactivate Assistant
+
+' Final State: Guest has necessary information
+Guest -> Assistant: "Thank you for your help!"
+@enduml
+
+
+
+## **7. Exploring Group or Event Accommodations**
+
+### **Guest Intent:** "I'm organizing an event and need information on accommodations for a large group."
+
+**Entities:**
+
+- **GroupSize**
+    - **Type:** Integer
+    - **Purpose:** Number of attendees.
+    - **Possible Values:** 10 to 100+
+- **EventType**
+    - **Type:** String
+    - **Purpose:** Nature of the event.
+    - **Possible Values:** "Wedding", "Corporate Retreat", "Family Reunion", "Workshop"
+- **AccommodationType**
+    - **Type:** String
+    - **Purpose:** Preferences for group accommodations.
+    - **Possible Values:** "Conference Rooms", "Group Suites", "Event Spaces"
+- **VacationDates**
+    - **Type:** Date Range
+    - **Purpose:** When the event is scheduled.
+    - **Possible Values:** Specific dates.
+
+**Conditions:**
+
+- **Group Accommodation Availability**
+    - **Description:** Ensure accommodations can host the group size and event type.
+    - **Related Entities:** GroupSize, EventType, VacationDates
+- **Event Support Services**
+    - **Description:** Check if the resort offers services needed for the event.
+    - **Related Entities:** EventType
+
+**Actions:**
+
+- **Provide Group Accommodation Options**
+    - **Description:** Suggest suitable accommodations and event spaces.
+    - **Required Entities:** GroupSize, EventType
+- **Share Event Support Services**
+    - **Description:** Inform about available services like catering, AV equipment, etc.
+    - **Required Entities:** EventType
+- **Assist with Event Planning**
+    - **Description:** Offer to connect with event coordinators or provide planning assistance.
+    - **Required Entities:** ContactMethod
+
+**Conversation Flow:**
+
+1. **Guest Inquires About Group/Event Accommodations**
+    - Entities Collected: GroupSize, EventType
+2. **AI Recommends Suitable Options**
+    - Action: Suggest accommodations and event spaces.
+3. **IF** Event Support Services are required **THEN**
+    - Action: Provide information on available services.
+4. **IF** VacationDates are provided **THEN**
+    - Action: Check availability and assist with booking.
+5. **ELSE**
+    - Action: Offer to connect with event coordinators for planning.
+6. **Final State:**
+    - Guest has the necessary information to organize the event at The Machan.
+
+**Evidence from Transcripts:**
+
+- *"I'm planning a corporate retreat for 30 people. Do you have suitable accommodations and meeting rooms?"*
+    
+    (Imagined example based on meeting insights)
+    
+
+---

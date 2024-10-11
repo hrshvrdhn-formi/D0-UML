@@ -1,0 +1,203 @@
+@startuml
+' Define participants
+actor Guest
+participant "AI Assistant" as Assistant
+participant "Reservation System" as ReservationSystem
+
+' Start of the interaction
+Guest -> Assistant: "I have specific preferences and need help choosing the best accommodation for my stay."
+activate Assistant
+
+' Action: Collect GuestPreferences, GroupSize, VacationDates, BudgetRange
+Assistant -> Guest: "I'd be happy to help! Could you please share your preferences, the number of guests, your intended stay dates, and your budget range?"
+activate Guest
+
+' Guest provides entities
+Guest --> Assistant: GuestPreferences: "Privacy, Luxury"\nGroupSize: "2"\nVacationDates: "2024-12-01 to 2024-12-10"\nBudgetRange: "$1500-$2500"
+deactivate Guest
+
+' Action: Analyze and Match Preferences
+Assistant -> Assistant: Analyze GuestPreferences, GroupSize, VacationDates, BudgetRange <<action>>
+
+' Condition: Are Decision Criteria and Priority Features Provided?
+alt Decision Criteria and Priority Features Provided? <<condition>>
+    ' Action: Analyze and Match Preferences
+    Assistant -> ReservationSystem: "Find accommodations matching Preferences: 'Privacy, Luxury', GroupSize: '2', Dates: '2024-12-01 to 2024-12-10', Budget: '$1500-$2500' <<action>>"
+    activate ReservationSystem
+    ReservationSystem --> Assistant: "Matching Machans: 'Starlight Machan', 'Canopy Machan'"
+    deactivate ReservationSystem
+    
+    ' Condition: Match Between Preferences and Available Machans
+    alt Match found within BudgetRange? <<condition>>
+        ' Action: Provide Personalized Recommendations
+        Assistant -> Guest: "Based on your preferences, here are some accommodations you might like:\n1. **Starlight Machan** - Luxury suites with private pools.\n2. **Canopy Machan** - Eco-friendly rooms with spacious layouts.\nWould you like more details on any of these options?"
+        activate Guest
+        
+        ' Guest requests more details
+        Guest -> Assistant: "Yes, please provide more details about Starlight Machan."
+        deactivate Guest
+        
+        ' Action: Provide Detailed Accommodation Information
+        Assistant -> ReservationSystem: "Fetch details for 'Starlight Machan' <<action>>"
+        activate ReservationSystem
+        ReservationSystem --> Assistant: "Starlight Machan offers luxury suites with private pools, complimentary breakfast, and 24/7 concierge service."
+        deactivate ReservationSystem
+        
+        Assistant -> Guest: "Here are the details for **Starlight Machan**:\n- **Price:** $2000 per night\n- **Amenities:** Private pool, complimentary breakfast, 24/7 concierge\n- **Special Features:** Romantic ambiance, stunning views\nWould you like assistance with booking this accommodation?"
+        activate Guest
+        
+        ' Guest decides to book
+        Guest -> Assistant: "Yes, please assist me with the booking."
+        deactivate Guest
+        
+        ' Action: Assist with Booking
+        Assistant -> ReservationSystem: "Book 'Starlight Machan' for Guest from '2024-12-01 to 2024-12-10' <<action>>"
+        activate ReservationSystem
+        ReservationSystem --> Assistant: "Booking confirmed for Starlight Machan from 2024-12-01 to 2024-12-10."
+        deactivate ReservationSystem
+        
+        Assistant -> Guest: "Your booking at **Starlight Machan** has been confirmed for the specified dates. Is there anything else I can assist you with?"
+        activate Guest
+        
+        Guest -> Assistant: "No, that's all for now. Thank you!"
+        deactivate Guest
+    else (No)
+        ' Action: Suggest Adjusting Preferences or Budget
+        Assistant -> Guest: "It seems there are no accommodations that fully match your preferences within your budget.\nWould you like to adjust your preferences or consider a different budget range?"
+        activate Guest
+        
+        ' Guest decides to adjust budget
+        Guest -> Assistant: "I'm willing to increase my budget to $3000."
+        deactivate Guest
+        
+        ' Action: Re-analyze and Provide Recommendations
+        Assistant -> ReservationSystem: "Find accommodations matching Preferences: 'Privacy, Luxury', GroupSize: '2', Dates: '2024-12-01 to 2024-12-10', Budget: '$1500-$3000' <<action>>"
+        activate ReservationSystem
+        ReservationSystem --> Assistant: "Matching Machans: 'Starlight Machan', 'Diamond Machan'"
+        deactivate ReservationSystem
+        
+        Assistant -> Guest: "With the updated budget, here are additional options:\n1. **Diamond Machan** - Exclusive villas with personalized services.\nWould you like more details on any of these options?"
+        activate Guest
+        
+        ' Guest decides to book Diamond Machan
+        Guest -> Assistant: "Yes, please assist me with booking Diamond Machan."
+        deactivate Guest
+        
+        ' Action: Assist with Booking
+        Assistant -> ReservationSystem: "Book 'Diamond Machan' for Guest from '2024-12-01 to 2024-12-10' <<action>>"
+        activate ReservationSystem
+        ReservationSystem --> Assistant: "Booking confirmed for Diamond Machan from 2024-12-01 to 2024-12-10."
+        deactivate ReservationSystem
+        
+        Assistant -> Guest: "Your booking at **Diamond Machan** has been confirmed for the specified dates. Is there anything else I can assist you with?"
+        activate Guest
+        
+        Guest -> Assistant: "No, that's all. Thank you!"
+        deactivate Guest
+    end alt
+else (No)
+    ' Action: Ask Clarifying Questions to Collect Missing Entities
+    Assistant -> Guest: "I noticed some of your preferences are missing. Could you please provide more details on your preferred amenities or any other requirements?"
+    activate Guest
+    
+    ' Guest provides missing entities
+    Guest --> Assistant: "I'd like a private balcony and close proximity to nature."
+    deactivate Guest
+    
+    ' Re-analyze and proceed as above (looping back)
+    Assistant -> Assistant: Re-analyze with updated preferences <<action>>
+    
+    ' (For brevity, assume the assistant follows the same flow as above after collecting all entities)
+    
+    ' Final Interaction Steps would mirror the above paths based on new inputs
+end alt
+
+' Final State: Guest feels confident in booking decision (Handled within the above steps)
+
+@enduml
+
+
+
+
+## **2. Assistance with Complex Decision-Making**
+
+### **Guest Intent:**
+
+"There are so many options; can you help me decide which room is best for me?"
+
+**Guest's Job to Be Done:**
+
+Delegate the complexity of filtering through multiple accommodation options to an expert.
+
+**Outcome for the Guest:**
+
+Simplify the decision-making process and feel assured that the chosen option is optimal.
+
+**Outcome for the Business:**
+
+Facilitate a smoother booking process, reducing decision fatigue and increasing conversion rates.
+
+**Compulsory Entities:**
+
+- **DecisionCriteria**
+    - **Type:** List of Strings
+    - **Purpose:** Identify factors important to the guest.
+    - **Possible Values:** "Price", "View", "Amenities", "Accessibility"
+- **DecisionFatigueLevel**
+    - **Type:** Boolean
+    - **Purpose:** Recognize if the guest is overwhelmed.
+    - **Possible Values:** Yes, No
+- **PriorityFeatures**
+    - **Type:** List of Strings
+    - **Purpose:** Features the guest values most.
+    - **Possible Values:** "Private balcony", "Close to nature", "Luxury bathroom"
+
+**Key Conditions:**
+
+- **High Decision Fatigue**
+    - **Description:** Guest is experiencing difficulty in making a choice.
+    - **Related Entities:** DecisionFatigueLevel
+    - **Possible Values:** Yes
+
+**Primary Actions:**
+
+- **Simplify Options**
+    - **Description:** Narrow down choices to top recommendations.
+    - **Required Entities:** DecisionCriteria, PriorityFeatures
+    - **Resulting State Change:** Reduced options list.
+- **Provide Expert Guidance**
+    - **Description:** Offer insights to aid decision-making.
+    - **Required Entities:** Knowledge of Machans
+    - **Resulting State Change:** Guest gains clarity.
+- **Reassure the Guest**
+    - **Description:** Build confidence in the recommended options.
+    - **Required Entities:** Trust-building communication
+    - **Resulting State Change:** Guest feels supported.
+
+**Core Conversation Flow:**
+
+- **Initial State:**
+    
+    Entities Collected: DecisionFatigueLevel = Yes
+    
+- **Action:** Acknowledge guest's feelings and offer assistance.
+- **IF** PriorityFeatures are known **THEN**
+    - **Action:** Recommend Machans that best meet these features.
+- **ELSE**
+    - **Action:** Ask about PriorityFeatures to tailor recommendations.
+- **Final State:**
+    
+    Guest feels relieved and confident to make a booking decision.
+    
+
+**Critical Error Handling:**
+
+- **Error:** Guest remains indecisive after recommendations.
+    - **Recovery Action:** Suggest a virtual tour or provide additional testimonials.
+
+**Evidence/Citation:**
+
+- **Stakeholder Input:**
+    - *Varun highlighted the need to assist guests overwhelmed by choices, helping them make decisions they trust (Meeting Transcript, 00:25).*
+
+---
